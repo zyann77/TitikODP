@@ -19,6 +19,7 @@
             --bg-elevated: #10152E;
             
             /* NOC Specific Sub-Path Colors */
+            --c-server:   #FF0055; /* Warna Eksklusif Server (Neon Crimson) */
             --c-mahkota1: #FFD700; /* Gold / Amber */
             --c-mahkota2: #0A84FF; /* Electric Blue */
             --c-mahkota3: #BF5AF2; /* Violet / Purple */
@@ -86,10 +87,8 @@
         /* === VIEW 2: MAP NOC === */
         #map { width: 100%; height: 100%; z-index: 1; background: #000; }
         
-        /* CSS Khusus agar peta satelit gelap HANYA untuk Layer NOC */
         .map-dark-filter { filter: brightness(0.3) contrast(1.2) saturate(0.8); }
 
-        /* Kostumisasi Tampilan Menu Layer Control Leaflet */
         .leaflet-control-layers { background: rgba(10, 16, 32, 0.85) !important; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border) !important; border-radius: 14px !important; color: #FFF !important; box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important; padding: 6px !important; }
         .leaflet-control-layers-list { margin-bottom: 0; }
         .leaflet-control-layers label { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; font-size: 13px; font-weight: 500; display: flex; align-items: center; padding: 4px 0; }
@@ -109,17 +108,22 @@
         .legend-item:last-child { margin-bottom: 0; }
         .legend-color { width: 10px; height: 10px; border-radius: 50%; margin-right: 12px; box-shadow: 0 0 10px currentColor; }
 
-        /* === CUSTOM FIBER OPTIC NODES & LINES === */
+        /* === CUSTOM FIBER OPTIC NODES & LINES (WIFI & SERVER ICONS) === */
         .node-wrapper { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
-        .node-core { width: 10px; height: 10px; border-radius: 50%; background: #FFF; border: 2px solid; animation: pulseNode 2.5s infinite alternate ease-in-out; }
+        
+        /* Ikon WIFI Animasi Pulse */
+        .odp-wifi { animation: pulseWifi 1.5s infinite alternate ease-in-out; }
+        
+        /* Ikon Server Animasi Float & Spin */
         .server-wrapper { display: flex; align-items: center; justify-content: center; position: relative; width: 100%; height: 100%; }
-        .server-core { width: 14px; height: 14px; background: #FFF; border: 3px solid #FFD700; border-radius: 50%; box-shadow: 0 0 20px #FFD700, 0 0 40px #FFD700; z-index: 2; }
-        .server-ring { position: absolute; width: 35px; height: 35px; border: 1.5px solid #FFD700; border-radius: 50%; animation: ping 2.5s cubic-bezier(0, 0, 0.2, 1) infinite; opacity: 0.8; }
+        .server-icon { color: var(--c-server); width: 24px; height: 24px; z-index: 2; filter: drop-shadow(0 0 8px var(--c-server)); animation: floatServer 2s infinite ease-in-out alternate; }
+        .server-ring { position: absolute; width: 45px; height: 45px; border: 2px dashed var(--c-server); border-radius: 50%; animation: spinRing 10s linear infinite; opacity: 0.8; }
 
         .data-stream { stroke-dasharray: 2 24; animation: flowData 1.5s linear infinite; }
         
-        @keyframes pulseNode { 0% { transform: scale(0.95); filter: brightness(0.8); } 100% { transform: scale(1.2); filter: brightness(1.5); } }
-        @keyframes ping { 75%, 100% { transform: scale(2.2); opacity: 0; } }
+        @keyframes floatServer { 0% { transform: translateY(-3px); filter: drop-shadow(0 0 8px var(--c-server)); } 100% { transform: translateY(3px); filter: drop-shadow(0 0 20px var(--c-server)); } }
+        @keyframes spinRing { 100% { transform: rotate(360deg); } }
+        @keyframes pulseWifi { 0% { transform: scale(0.9); opacity: 0.7; } 100% { transform: scale(1.15); opacity: 1; } }
         @keyframes flowData { from { stroke-dashoffset: 26; } to { stroke-dashoffset: 0; } }
 
         /* === FLOATING BOTTOM NAVIGATION === */
@@ -321,33 +325,16 @@
 
         // --- MAP INITIALIZATION ---
         var map = L.map('map', { zoomControl: false }).setView([-6.5728706, 107.7746767], 16);
-        L.control.zoom({ position: 'topleft' }).addTo(map); 
+        L.control.zoom({ position: 'topright' }).addTo(map); 
 
-        // Definisikan Pilihan Map Layer
-        var darkSatellite = L.tileLayer('http://{s}.google.com/vt?lyrs=s,h&x={x}&y={y}&z={z}', { 
-            maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'], 
-            className: 'map-dark-filter' // Class khusus untuk efek gelap NOC
-        });
-        
-        var normalSatellite = L.tileLayer('http://{s}.google.com/vt?lyrs=s,h&x={x}&y={y}&z={z}', { 
-            maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'] 
-        });
-        
-        var googleStreets = L.tileLayer('http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}', { 
-            maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'] 
-        });
+        var darkSatellite = L.tileLayer('http://{s}.google.com/vt?lyrs=s,h&x={x}&y={y}&z={z}', { maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'], className: 'map-dark-filter' });
+        var normalSatellite = L.tileLayer('http://{s}.google.com/vt?lyrs=s,h&x={x}&y={y}&z={z}', { maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'] });
+        var googleStreets = L.tileLayer('http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}', { maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'] });
 
-        // Set Base Default ke Dark NOC
         darkSatellite.addTo(map);
+        L.control.layers({ "🛰️ Satelit Dark (NOC)": darkSatellite, "🌍 Satelit Normal": normalSatellite, "🗺️ Peta Jalan": googleStreets }, null, { position: 'topright' }).addTo(map);
 
-        // Tambahkan Tombol Control Layer (Posisi Kanan Atas)
-        L.control.layers({
-            "🛰️ Satelit Dark (NOC)": darkSatellite,
-            "🌍 Satelit Normal": normalSatellite,
-            "🗺️ Peta Jalan": googleStreets
-        }, null, { position: 'topright' }).addTo(map);
-
-        // --- NOC NETWORK LOGIC ---
+        // --- NOC NETWORK LOGIC (WIFI ODP & SERVER ICONS) ---
         const groupMapping = [
             { prefix: "Mahkota 1", color: "var(--c-mahkota1)" },
             { prefix: "Mahkota 2", color: "var(--c-mahkota2)" },
@@ -359,14 +346,24 @@
             { prefix: "Cibarola 1", color: "var(--c-cibarola)" },
         ];
 
+        // 1. Ikon Server Custom (Menggunakan Raw SVG Lucide agar stabil di Leaflet)
         var serverIcon = L.divIcon({
             className: 'custom-div-icon',
-            html: `<div class="server-wrapper"><div class="server-core"></div><div class="server-ring"></div></div>`,
-            iconSize: [30, 30], iconAnchor: [15, 15]
+            html: `
+            <div class="server-wrapper">
+                <svg class="server-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="2" width="20" height="8" rx="2" ry="2"/>
+                    <rect x="2" y="14" width="20" height="8" rx="2" ry="2"/>
+                    <line x1="6" y1="6" x2="6.01" y2="6"/>
+                    <line x1="6" y1="18" x2="6.01" y2="18"/>
+                </svg>
+                <div class="server-ring"></div>
+            </div>`,
+            iconSize: [45, 45], iconAnchor: [22, 22]
         });
 
         L.marker([-6.5728706, 107.7746767], {icon: serverIcon}).addTo(map).bindPopup(`
-            <b style="color: var(--c-mahkota1); text-shadow: 0 0 10px rgba(255,215,0,0.5);">SERVER CIBAROLA</b>
+            <b style="color: var(--c-server); text-shadow: 0 0 10px rgba(255,0,85,0.5);">SERVER CIBAROLA</b>
             <span style="font-size: 13px; color: rgba(255,255,255,0.6);">Uplink Utama</span>
             <a href="https://www.google.com/maps/dir/?api=1&destination=-6.5728706,107.7746767" target="_blank" class="btn-navigasi">Arahkan Rute</a>
         `); 
@@ -397,10 +394,19 @@
                         if (matchedPrefix) {
                             networkPaths[matchedPrefix].nodes.push({ name: namaOdp, lat: lat, lng: lng, jalur: jalur });
 
+                            // 2. Ikon ODP WIFI (Menggunakan Raw SVG Lucide berwarna dinamis)
                             const odpIcon = L.divIcon({
                                 className: 'custom-div-icon',
-                                html: `<div class="node-wrapper"><div class="node-core" style="border-color: ${matchedColor}; box-shadow: 0 0 12px ${matchedColor}, inset 0 0 4px ${matchedColor};"></div></div>`,
-                                iconSize: [16, 16], iconAnchor: [8, 8]
+                                html: `
+                                <div class="node-wrapper">
+                                    <svg class="odp-wifi" style="color: ${matchedColor}; filter: drop-shadow(0 0 6px ${matchedColor});" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M5 12.55a11 11 0 0 1 14.08 0"/>
+                                        <path d="M1.42 9a16 16 0 0 1 21.16 0"/>
+                                        <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+                                        <line x1="12" y1="20" x2="12.01" y2="20"/>
+                                    </svg>
+                                </div>`,
+                                iconSize: [20, 20], iconAnchor: [10, 10]
                             });
 
                             L.marker([lat, lng], {icon: odpIcon}).addTo(map).bindPopup(`
