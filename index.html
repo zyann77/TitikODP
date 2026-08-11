@@ -2,234 +2,431 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Navigasi ODP - RnBNET</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Sistem Navigasi ODP - RnBNET</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
     <style>
+        /* === COLOR PALETTE & VARIABLES === */
         :root {
-            --primary-blue: #0066ff;
-            --success-green: #059669;
-            --bg-body: #f3f4f6;
-            --card-bg: #ffffff;
-            --text-dark: #1f2937;
-            --text-muted: #6b7280;
-            --border-color: #e5e7eb;
+            /* iOS Premium Dark Palette */
+            --bg-base: #05060A;
+            --bg-surface: #0A1020;
+            --bg-elevated: #10152E;
+            
+            --accent-blue: #0A84FF;
+            --accent-indigo: #5E5CE6;
+            --accent-purple: #BF5AF2;
+            
+            --text-primary: #FFFFFF;
+            --text-secondary: rgba(255, 255, 255, 0.72);
+            --text-tertiary: rgba(255, 255, 255, 0.45);
+            
+            --glass-bg: rgba(255, 255, 255, 0.06);
+            --glass-bg-hover: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.10);
+            
+            --spring-easing: cubic-bezier(0.32, 0.72, 0, 1);
+            --safe-bottom: env(safe-area-inset-bottom, 20px);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", system-ui, sans-serif; 
+            -webkit-font-smoothing: antialiased; 
+            -webkit-tap-highlight-color: transparent;
+        }
         
         body { 
-            background-color: var(--bg-body); 
-            color: var(--text-dark); 
-            min-height: 100vh; 
+            background-color: var(--bg-base);
+            color: var(--text-primary); 
+            height: 100dvh; 
+            width: 100vw;
+            overflow: hidden; 
+            position: relative;
         }
 
-        /* Top Navigation Bar */
-        .topbar {
-            background-color: var(--primary-blue);
-            color: white;
-            padding: 18px 20px;
-            text-align: center;
-            font-size: 18px;
-            font-weight: 700;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 10;
+        /* === ANIMATED AURORA BACKGROUND === */
+        .ambient-bg {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -2; overflow: hidden; background: var(--bg-base);
+        }
+        .orb {
+            position: absolute; border-radius: 50%; filter: blur(80px);
+            opacity: 0.4; animation: float 20s infinite ease-in-out alternate;
+        }
+        .orb-1 { width: 300px; height: 300px; background: var(--accent-indigo); top: -10%; left: -10%; }
+        .orb-2 { width: 400px; height: 400px; background: var(--accent-purple); bottom: -20%; right: -10%; animation-delay: -5s; }
+        .orb-3 { width: 250px; height: 250px; background: var(--accent-blue); top: 40%; left: 40%; animation-delay: -10s; opacity: 0.2; }
+        
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, 50px) scale(1.2); }
         }
 
-        .container {
-            padding: 20px;
-            max-width: 500px;
-            margin: 0 auto;
+        /* === FLOATING DECORATIVE ELEMENTS === */
+        .floating-elements {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none;
+        }
+        .float-icon {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            padding: 12px;
+            color: var(--text-tertiary);
+            backdrop-filter: blur(10px);
+            animation: slowFloat 15s infinite ease-in-out alternate;
+        }
+        .fi-1 { top: 15%; right: 10%; animation-delay: 0s; }
+        .fi-2 { top: 45%; left: 5%; animation-delay: -3s; }
+        .fi-3 { bottom: 30%; right: 15%; animation-delay: -7s; }
+
+        @keyframes slowFloat {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-30px) rotate(10deg); }
         }
 
-        /* Card Menu Utama */
-        .card {
-            background: var(--card-bg);
-            border-radius: 16px;
+        /* === SLIDER STRUCTURE === */
+        .app-slider {
+            display: flex; width: 200vw; height: 100dvh;
+            transition: transform 0.6s var(--spring-easing);
+        }
+        .view-search, .view-map { width: 100vw; height: 100%; position: relative; }
+
+        /* === VIEW 1: SEARCH === */
+        .view-search {
+            overflow-y: auto; padding-bottom: calc(90px + var(--safe-bottom));
+        }
+
+        /* HEADER */
+        .header {
+            padding: 20px; text-align: center;
+            background: linear-gradient(180deg, rgba(5,6,10,0.8) 0%, rgba(5,6,10,0) 100%);
+            animation: fadeInDown 0.8s var(--spring-easing);
+        }
+        .header-pill {
+            display: inline-block;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            padding: 8px 16px; border-radius: 20px;
+            font-size: 12px; font-weight: 500; color: var(--text-secondary);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        /* HERO SECTION */
+        .hero {
+            text-align: center; padding: 20px 20px 30px;
+            animation: fadeInUp 0.8s var(--spring-easing) 0.1s both;
+        }
+        .hero-icon-wrapper {
+            width: 72px; height: 72px; margin: 0 auto 16px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
+            border: 1px solid var(--glass-border);
+            border-radius: 22px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 10px 30px rgba(10, 132, 255, 0.2), inset 0 1px 0 rgba(255,255,255,0.2);
+            position: relative;
+        }
+        .hero-icon-wrapper::after {
+            content: ''; position: absolute; inset: -1px; border-radius: 23px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            z-index: -1; opacity: 0.5; filter: blur(10px);
+        }
+        .hero h1 {
+            font-size: 32px; font-weight: 700; letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #FFF, #A5B4FC);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 6px;
+        }
+        .hero p { font-size: 14px; color: var(--text-secondary); }
+
+        /* MAIN CARD */
+        .container { padding: 0 20px; }
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
             padding: 24px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-            margin-bottom: 20px;
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .card-header h2 {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-left: 10px;
-        }
-
-        /* Form & Label */
-        .form-group {
-            margin-bottom: 18px;
-        }
-
-        label {
-            display: block;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 8px;
-        }
-
-        select {
-            width: 100%;
-            background-color: #f9fafb;
-            color: var(--text-dark);
-            border: 1px solid var(--border-color);
-            padding: 14px 16px;
-            font-size: 15px;
-            border-radius: 10px;
-            appearance: none;
-            outline: none;
-            transition: all 0.2s;
-            cursor: pointer;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 16px center;
-            background-size: 16px;
-        }
-
-        select:focus {
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.15);
-            background-color: #fff;
-        }
-
-        select:disabled {
-            background-color: #f3f4f6;
-            color: #9ca3af;
-            cursor: not-allowed;
-            border-color: #e5e7eb;
-        }
-
-        /* Tombol Aksi */
-        .btn-maps {
-            width: 100%;
-            background-color: var(--success-green);
-            color: white;
-            border: none;
-            padding: 16px;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 700;
-            margin-top: 10px;
-            cursor: pointer;
-            display: none; /* Hidden by default */
-            transition: background-color 0.2s;
-            box-shadow: 0 4px 6px rgba(5, 150, 105, 0.2);
-        }
-
-        .btn-maps:active {
-            transform: scale(0.98);
-            background-color: #047857;
+            box-shadow: 0 24px 40px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
+            animation: fadeInUp 0.8s var(--spring-easing) 0.2s both;
+            position: relative;
+            overflow: hidden;
         }
         
-        .btn-monitoring {
-            width: 100%;
-            display: block;
-            background-color: #eff6ff;
-            color: var(--primary-blue);
-            border: 1px solid #bfdbfe;
-            padding: 16px;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 600;
-            text-decoration: none;
-            text-align: center;
-            transition: all 0.2s;
+        /* Subtle Inner Glow in Card */
+        .glass-card::before {
+            content: ''; position: absolute; top: 0; left: 20%; width: 60%; height: 100%;
+            background: radial-gradient(ellipse at top, rgba(94, 92, 230, 0.15) 0%, transparent 70%);
+            pointer-events: none;
         }
 
-        .btn-monitoring:active {
-            background-color: #dbeafe;
-            transform: scale(0.98);
+        /* INPUT GROUPS */
+        .input-group { position: relative; margin-bottom: 16px; }
+        .input-icon {
+            position: absolute; left: 18px; top: 50%; transform: translateY(-50%);
+            color: var(--accent-blue); width: 20px; height: 20px; pointer-events: none;
+        }
+        .input-arrow {
+            position: absolute; right: 18px; top: 50%; transform: translateY(-50%);
+            color: var(--text-tertiary); width: 18px; height: 18px; pointer-events: none;
+            transition: color 0.3s;
+        }
+        
+        select {
+            width: 100%; height: 60px;
+            background: rgba(0, 0, 0, 0.2);
+            color: var(--text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 0 45px 0 50px;
+            font-size: 15px; font-weight: 500;
+            border-radius: 20px;
+            appearance: none; outline: none; cursor: pointer;
+            transition: all 0.3s var(--spring-easing);
+        }
+        
+        select:focus {
+            background: rgba(10, 132, 255, 0.1);
+            border-color: rgba(10, 132, 255, 0.5);
+            box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.15);
+        }
+        
+        select:active { transform: scale(0.98); }
+        select:disabled { opacity: 0.5; }
+        select option { background: var(--bg-elevated); color: var(--text-primary); }
+
+        /* BUTTON ACTION */
+        .btn-action {
+            width: 100%; height: 60px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-indigo));
+            color: white; border: none; border-radius: 20px;
+            font-size: 16px; font-weight: 600;
+            margin-top: 10px; cursor: pointer; display: none;
+            box-shadow: 0 8px 25px rgba(94, 92, 230, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+            transition: all 0.3s var(--spring-easing);
+            position: relative; overflow: hidden;
+        }
+        
+        .btn-action::after {
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
+            transform: skewX(-20deg); animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer { 100% { left: 200%; } }
+
+        .btn-action:active { transform: scale(0.96); box-shadow: 0 4px 15px rgba(94, 92, 230, 0.3); }
+
+        /* === VIEW 2: MAP === */
+        #map { width: 100%; height: 100%; z-index: 1; }
+        
+        /* Premium Map Popups */
+        .leaflet-popup-content-wrapper { 
+            background: rgba(16, 21, 46, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            color: white; border-radius: 20px; padding: 5px; border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .leaflet-popup-tip { background: rgba(16, 21, 46, 0.85); backdrop-filter: blur(20px); }
+        .leaflet-popup-content { margin: 12px; min-width: 180px; text-align: center; }
+        .leaflet-popup-content b { color: #FFF; font-size: 16px; font-weight: 600; display: block; margin-bottom: 4px; }
+        
+        .btn-navigasi {
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-indigo));
+            color: white !important; padding: 12px; border-radius: 14px;
+            text-decoration: none; font-weight: 600; font-size: 14px; margin-top: 14px;
+            box-shadow: 0 4px 15px rgba(10, 132, 255, 0.3);
         }
 
-        .footer {
-            text-align: center;
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 20px;
+        /* === FLOATING BOTTOM NAVIGATION === */
+        .bottom-nav-container {
+            position: fixed; bottom: var(--safe-bottom); left: 0; width: 100%;
+            padding: 0 20px; z-index: 1000;
+            display: flex; justify-content: center;
+        }
+        .bottom-nav {
+            background: rgba(20, 20, 30, 0.65);
+            backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 30px;
+            display: flex; width: 100%; max-width: 350px;
+            padding: 6px; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            animation: slideUpNav 0.8s var(--spring-easing) 0.3s both;
+        }
+        .nav-item {
+            flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 12px; border-radius: 24px;
+            color: var(--text-tertiary); cursor: pointer;
+            transition: all 0.4s var(--spring-easing);
+            font-size: 13px; font-weight: 500;
+        }
+        .nav-item i { width: 18px; height: 18px; transition: all 0.4s; }
+        
+        /* Active State Menu */
+        .nav-item.active {
+            background: rgba(10, 132, 255, 0.15);
+            color: var(--text-primary);
+            box-shadow: inset 0 0 0 1px rgba(10, 132, 255, 0.2);
+        }
+        .nav-item.active i {
+            color: var(--accent-blue);
+            filter: drop-shadow(0 0 8px rgba(10,132,255,0.6));
+        }
+
+        /* Animations Keyframes */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideUpNav {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
-    <!-- Bar Biru di Atas -->
-    <div class="topbar">
-        RnBNET
+    <!-- Ambient Animated Background -->
+    <div class="ambient-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
     </div>
 
-    <div class="container">
+    <!-- Floating Decorative Icons -->
+    <div class="floating-elements">
+        <i data-lucide="server" class="float-icon fi-1"></i>
+        <i data-lucide="network" class="float-icon fi-2"></i>
+        <i data-lucide="radio" class="float-icon fi-3"></i>
+    </div>
+
+    <!-- Main Slider -->
+    <div class="app-slider" id="appSlider">
         
-        <!-- Kartu Pencarian -->
-        <div class="card">
-            <div class="card-header">
-                <span style="font-size: 24px;">📍</span>
-                <h2>Pencarian Lokasi ODP</h2>
+        <!-- === LEFT VIEW: SEARCH === -->
+        <div class="view-search">
+            
+            <div class="header">
+                <div class="header-pill">RnBNET • Area Cibarola & Sekitarnya</div>
             </div>
 
-            <div class="form-group">
-                <label for="server">1. Pilih Server Induk</label>
-                <select id="server" onchange="updateJalur()">
-                    <option value="" disabled selected>-- Ketuk untuk memilih --</option>
-                    <option value="Cibarola">Server Cibarola</option>
-                    <option value="Panglejar">Server Panglejar</option>
-                    <option value="Perum">Server Perum</option>
-                    <option value="Sukamelang">Server Sukamelang</option>
-                </select>
+            <div class="hero">
+                <div class="hero-icon-wrapper">
+                    <i data-lucide="search" color="white" size="32"></i>
+                </div>
+                <h1>Cari ODP</h1>
+                <p>Arahkan teknisi ke titik pelanggan</p>
             </div>
 
-            <div class="form-group">
-                <label for="jalur">2. Pilih Jalur Distribusi</label>
-                <select id="jalur" onchange="updateOdp()" disabled>
-                    <option value="" disabled selected>-- Pilih server lebih dulu --</option>
-                </select>
-            </div>
+            <div class="container">
+                <div class="glass-card">
+                    
+                    <div class="input-group">
+                        <i data-lucide="server" class="input-icon"></i>
+                        <select id="server" onchange="updateJalur()">
+                            <option value="" disabled selected>Pilih Server Induk</option>
+                            <option value="Cibarola">Server Cibarola</option>
+                            <option value="Panglejar">Server Panglejar</option>
+                            <option value="Perum">Server Perum</option>
+                            <option value="Sukamelang">Server Sukamelang</option>
+                        </select>
+                        <i data-lucide="chevron-down" class="input-arrow"></i>
+                    </div>
 
-            <div class="form-group">
-                <label for="odp">3. Titik ODP Pelanggan</label>
-                <select id="odp" onchange="checkSelection()" disabled>
-                    <option value="" disabled selected>-- Pilih jalur lebih dulu --</option>
-                </select>
-            </div>
+                    <div class="input-group">
+                        <i data-lucide="network" class="input-icon"></i>
+                        <select id="jalur" onchange="updateOdp()" disabled>
+                            <option value="" disabled selected>Pilih Jalur Distribusi</option>
+                        </select>
+                        <i data-lucide="chevron-down" class="input-arrow"></i>
+                    </div>
 
-            <!-- Tombol Navigasi Hijau -->
-            <button id="btnMaps" class="btn-maps" onclick="bukaMaps()">🗺️ Arahkan Rute</button>
+                    <div class="input-group">
+                        <i data-lucide="map-pin" class="input-icon"></i>
+                        <select id="odp" onchange="checkSelection()" disabled>
+                            <option value="" disabled selected>Pilih Titik ODP</option>
+                        </select>
+                        <i data-lucide="chevron-down" class="input-arrow"></i>
+                    </div>
+
+                    <!-- Button ID retained for logic, text changed as requested -->
+                    <button id="btnMaps" class="btn-action" onclick="bukaMaps()">
+                        Cari ODP
+                    </button>
+                    
+                </div>
+            </div>
         </div>
 
-        <!-- Tombol Tambahan -->
-        <a href="monitoring.html" class="btn-monitoring">
-            📡 Buka Live Monitoring Peta
-        </a>
-
-        <div class="footer">
-            Sistem Navigasi Lapangan &copy; RnBNET
+        <!-- === RIGHT VIEW: LIVE MAPS === -->
+        <div class="view-map">
+            <div id="map"></div>
         </div>
 
     </div>
 
-    <!-- Panggil File Database (Tetap menggunakan data yang sama) -->
-    <script src="data-odp.js"></script>
+    <!-- === FLOATING BOTTOM NAVIGATION === -->
+    <div class="bottom-nav-container">
+        <div class="bottom-nav">
+            <div class="nav-item active" id="tabSearch" onclick="slideLayar('kiri')">
+                <i data-lucide="search"></i>
+                <span>Pencarian ODP</span>
+            </div>
+            <div class="nav-item" id="tabMap" onclick="slideLayar('kanan')">
+                <i data-lucide="map"></i>
+                <span>Live Maps</span>
+            </div>
+        </div>
+    </div>
 
-    <!-- Logika Aplikasi (Tetap sama agar fungsi tidak rusak) -->
+    <!-- Required Scripts -->
+    <script src="data-odp.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <script>
+        // Render Lucide Icons
+        lucide.createIcons();
+
+        // --- UI LOGIC: SLIDE ANIMATION ---
+        function slideLayar(arah) {
+            const slider = document.getElementById('appSlider');
+            const tabSearch = document.getElementById('tabSearch');
+            const tabMap = document.getElementById('tabMap');
+
+            if (arah === 'kiri') {
+                slider.style.transform = 'translateX(0)';
+                tabSearch.classList.add('active');
+                tabMap.classList.remove('active');
+            } else if (arah === 'kanan') {
+                slider.style.transform = 'translateX(-100vw)';
+                tabMap.classList.add('active');
+                tabSearch.classList.remove('active');
+                
+                // Invalidate size to fix map rendering issue after sliding
+                setTimeout(() => { map.invalidateSize(); }, 400);
+            }
+        }
+
+        // --- ORIGINAL APP LOGIC (UNCHANGED) ---
         function updateJalur() {
             const serverSelect = document.getElementById("server").value;
             const jalurSelect = document.getElementById("jalur");
             const odpSelect = document.getElementById("odp");
             const btnMaps = document.getElementById("btnMaps");
 
-            jalurSelect.innerHTML = '<option value="" disabled selected>-- Ketuk untuk memilih --</option>';
-            odpSelect.innerHTML = '<option value="" disabled selected>-- Pilih jalur lebih dulu --</option>';
+            jalurSelect.innerHTML = '<option value="" disabled selected>Pilih Jalur Distribusi</option>';
+            odpSelect.innerHTML = '<option value="" disabled selected>Pilih Titik ODP</option>';
             jalurSelect.disabled = true; odpSelect.disabled = true; btnMaps.style.display = "none";
 
             if (serverSelect && dataJaringan[serverSelect]) {
@@ -251,7 +448,7 @@
             const odpSelect = document.getElementById("odp");
             const btnMaps = document.getElementById("btnMaps");
 
-            odpSelect.innerHTML = '<option value="" disabled selected>-- Ketuk untuk memilih --</option>';
+            odpSelect.innerHTML = '<option value="" disabled selected>Pilih Titik ODP</option>';
             btnMaps.style.display = "none";
 
             if (serverSelect && jalurSelect && dataJaringan[serverSelect][jalurSelect]) {
@@ -269,17 +466,94 @@
         function checkSelection() {
             const odpSelect = document.getElementById("odp").value;
             const btnMaps = document.getElementById("btnMaps");
-            if (odpSelect !== "") { btnMaps.style.display = "block"; } else { btnMaps.style.display = "none"; }
+            if (odpSelect !== "") { 
+                btnMaps.style.display = "block"; 
+                // Add tiny bounce animation when button appears
+                btnMaps.style.animation = "none";
+                setTimeout(() => btnMaps.style.animation = "fadeInUp 0.4s var(--spring-easing)", 10);
+            } else { 
+                btnMaps.style.display = "none"; 
+            }
         }
 
         function bukaMaps() {
-            const koordinat = document.getElementById("odp").value;
-            if (koordinat === "KOSONG") { 
-                alert("Titik koordinat Maps untuk ODP ini belum dimasukkan ke sistem."); 
-            } else if (koordinat) { 
-                window.open(`https://www.google.com/maps/dir/?api=1&destination=${koordinat}`, "_blank"); 
+            // Added visual loading simulation on the button before executing original logic
+            const btn = document.getElementById("btnMaps");
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<i data-lucide="loader-2" class="lucide-spin" style="margin-right:8px; animation: spin 1s linear infinite;"></i> Memproses...`;
+            lucide.createIcons();
+            
+            setTimeout(() => {
+                const koordinat = document.getElementById("odp").value;
+                if (koordinat === "KOSONG") { 
+                    alert("Titik koordinat Maps untuk ODP ini belum dimasukkan."); 
+                } else if (koordinat) { 
+                    window.open(`https://www.google.com/maps/dir/?api=1&destination=${koordinat}`, "_blank"); 
+                }
+                btn.innerHTML = originalText;
+            }, 600);
+        }
+
+        // --- MAP INITIALIZATION LOGIC (UNCHANGED CORE, ENHANCED POPUPS) ---
+        var map = L.map('map', { zoomControl: false }).setView([-6.5728706, 107.7746767], 16);
+        L.control.zoom({ position: 'topleft' }).addTo(map);
+
+        var googleHybrid = L.tileLayer('http://{s}.google.com/vt?lyrs=s,h&x={x}&y={y}&z={z}', {
+            maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+        }).addTo(map);
+
+        var googleStreets = L.tileLayer('http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}', {
+            maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+        });
+
+        L.control.layers({
+            "🛰️ Peta Satelit": googleHybrid,
+            "🗺️ Peta Jalan": googleStreets
+        }, null, { position: 'topright' }).addTo(map);
+
+        var serverIcon = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
+        });
+
+        L.marker([-6.5728706, 107.7746767], {icon: serverIcon}).addTo(map).bindPopup(`
+            <b style="color: #FF453A;">SERVER CIBAROLA</b>
+            <span style="font-size: 13px; color: rgba(255,255,255,0.6);">Titik Pusat Induk</span>
+            <a href="https://www.google.com/maps/dir/?api=1&destination=-6.5728706,107.7746767" target="_blank" class="btn-navigasi">
+                <i data-lucide="target" style="width: 16px; height: 16px;"></i> Arahkan Rute
+            </a>
+        `); 
+
+        for (const server in dataJaringan) {
+            for (const jalur in dataJaringan[server]) {
+                for (const namaOdp in dataJaringan[server][jalur]) {
+                    const koordinat = dataJaringan[server][jalur][namaOdp];
+                    if (koordinat !== "") {
+                        const lat = parseFloat(koordinat.split(',')[0].trim());
+                        const lng = parseFloat(koordinat.split(',')[1].trim());
+
+                        L.marker([lat, lng]).addTo(map).bindPopup(`
+                            <b>${namaOdp}</b>
+                            <span style="font-size: 12px; color: rgba(255,255,255,0.6);">${jalur}</span>
+                            <a href="https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}" target="_blank" class="btn-navigasi">
+                                <i data-lucide="map-pin" style="width: 16px; height: 16px;"></i> Arahkan Rute
+                            </a>
+                        `);
+                    }
+                }
             }
         }
+        
+        // Re-render icons inside popups when opened
+        map.on('popupopen', function() {
+            lucide.createIcons();
+        });
+        
+        // Keyframe specific for loading spinner
+        const styleSheet = document.createElement("style");
+        styleSheet.innerText = `@keyframes spin { 100% { transform: rotate(360deg); } }`;
+        document.head.appendChild(styleSheet);
     </script>
 </body>
 </html>
