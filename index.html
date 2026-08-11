@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Navigasi ODP - RnBNET</title>
+    <style>
+        :root {
+            --bg-color: #1a1a2e;
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --input-bg: rgba(0, 0, 0, 0.25);
+            --primary-blue: #4776E6;
+            --primary-purple: #8E54E9;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
+        body { background: radial-gradient(circle at top left, #3b205e, #1a1a2e 50%, #151522); color: white; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .header-title { text-align: center; margin-top: 30px; margin-bottom: 40px; font-size: 20px; font-weight: 600; color: #e0e0e0; }
+        .glass-panel { background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 24px; width: 100%; max-width: 500px; padding: 24px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4); }
+        .panel-header { display: flex; align-items: center; margin-bottom: 25px; }
+        .icon-box { width: 48px; height: 48px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 24px; margin-right: 15px; }
+        .panel-title h2 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+        .panel-title p { font-size: 13px; color: #aaa; }
+        .form-group { margin-bottom: 16px; position: relative; }
+        
+        select { width: 100%; background: var(--input-bg); color: white; border: 1px solid rgba(255, 255, 255, 0.1); padding: 16px 20px; font-size: 15px; border-radius: 16px; appearance: none; outline: none; cursor: pointer; }
+        select:focus { border-color: rgba(255, 255, 255, 0.4); background: rgba(0, 0, 0, 0.4); }
+        select:disabled { opacity: 0.4; cursor: not-allowed; }
+        .select-arrow { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 6px solid rgba(255,255,255,0.5); pointer-events: none; }
+        option { background-color: #2a2a40; color: white; }
+        
+        .btn-action { width: 100%; background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple)); color: white; border: none; padding: 16px; border-radius: 16px; font-size: 16px; font-weight: 600; margin-top: 10px; cursor: pointer; display: none; }
+        .btn-action:active { transform: scale(0.97); }
+        .footer-text { margin-top: 40px; font-size: 12px; color: rgba(255,255,255,0.4); text-align: center; }
+    </style>
+</head>
+<body>
+
+    <div class="header-title">RnBNET - Navigasi Jaringan</div>
+
+    <div class="glass-panel">
+        <div class="panel-header">
+            <div class="icon-box">🗺️</div>
+            <div class="panel-title">
+                <h2>Lokasi ODP</h2>
+                <p>Cari & arahkan ke titik pelanggan</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <select id="server" onchange="updateJalur()">
+                <option value="" disabled selected>Pilih Server Induk</option>
+                <option value="Cibarola">Server Cibarola</option>
+                <option value="Panglejar">Server Panglejar</option>
+                <option value="Perum">Server Perum</option>
+                <option value="Sukamelang">Server Sukamelang</option>
+            </select>
+            <div class="select-arrow"></div>
+        </div>
+
+        <div class="form-group">
+            <select id="jalur" onchange="updateOdp()" disabled>
+                <option value="" disabled selected>Pilih Jalur Distribusi</option>
+            </select>
+            <div class="select-arrow"></div>
+        </div>
+
+        <div class="form-group">
+            <select id="odp" onchange="checkSelection()" disabled>
+                <option value="" disabled selected>Pilih Titik ODP</option>
+            </select>
+            <div class="select-arrow"></div>
+        </div>
+
+        <button id="btnMaps" class="btn-action" onclick="bukaMaps()">Buka di Google Maps</button>
+    </div>
+    <div class="footer-text">Created for Field Technicians • RnBNET</div>
+
+    <!-- INI ADALAH KODE UNTUK MEMANGGIL FILE DATABASE ODP ANDA -->
+    <script src="data-odp.js"></script>
+
+    <!-- INI ADALAH LOGIKA APLIKASINYA -->
+    <script>
+        function updateJalur() {
+            const serverSelect = document.getElementById("server").value;
+            const jalurSelect = document.getElementById("jalur");
+            const odpSelect = document.getElementById("odp");
+            const btnMaps = document.getElementById("btnMaps");
+
+            jalurSelect.innerHTML = '<option value="" disabled selected>Pilih Jalur Distribusi</option>';
+            odpSelect.innerHTML = '<option value="" disabled selected>Pilih Titik ODP</option>';
+            jalurSelect.disabled = true; odpSelect.disabled = true; btnMaps.style.display = "none";
+
+            if (serverSelect && dataJaringan[serverSelect]) {
+                const daftarJalur = dataJaringan[serverSelect];
+                if (Object.keys(daftarJalur).length > 0) {
+                    jalurSelect.disabled = false;
+                    for (const namaJalur in daftarJalur) {
+                        const option = document.createElement("option");
+                        option.value = namaJalur; option.textContent = namaJalur;
+                        jalurSelect.appendChild(option);
+                    }
+                }
+            }
+        }
+
+        function updateOdp() {
+            const serverSelect = document.getElementById("server").value;
+            const jalurSelect = document.getElementById("jalur").value;
+            const odpSelect = document.getElementById("odp");
+            const btnMaps = document.getElementById("btnMaps");
+
+            odpSelect.innerHTML = '<option value="" disabled selected>Pilih Titik ODP</option>';
+            btnMaps.style.display = "none";
+
+            if (serverSelect && jalurSelect && dataJaringan[serverSelect][jalurSelect]) {
+                odpSelect.disabled = false;
+                const daftarOdp = dataJaringan[serverSelect][jalurSelect];
+                for (const namaOdp in daftarOdp) {
+                    const option = document.createElement("option");
+                    option.value = daftarOdp[namaOdp] !== "" ? daftarOdp[namaOdp] : "KOSONG";
+                    option.textContent = namaOdp;
+                    odpSelect.appendChild(option);
+                }
+            } else { odpSelect.disabled = true; }
+        }
+
+        function checkSelection() {
+            const odpSelect = document.getElementById("odp").value;
+            const btnMaps = document.getElementById("btnMaps");
+            if (odpSelect !== "") { btnMaps.style.display = "block"; } else { btnMaps.style.display = "none"; }
+        }
+
+        function bukaMaps() {
+            const koordinat = document.getElementById("odp").value;
+            if (koordinat === "KOSONG") { alert("Titik koordinat Maps untuk ODP ini belum dimasukkan ke sistem."); } 
+            else if (koordinat) { window.open(`https://maps.google.com/?q=${koordinat}`, "_blank"); }
+        }
+    </script>
+</body>
+</html>
