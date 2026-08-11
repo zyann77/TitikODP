@@ -32,6 +32,12 @@
         
         .btn-action { width: 100%; background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple)); color: white; border: none; padding: 16px; border-radius: 16px; font-size: 16px; font-weight: 600; margin-top: 10px; cursor: pointer; display: none; }
         .btn-action:active { transform: scale(0.97); }
+        
+        /* Desain Tombol Menuju Monitoring */
+        .btn-secondary { width: 100%; display: block; background: rgba(255, 255, 255, 0.1); color: #ddd; border: 1px solid rgba(255, 255, 255, 0.2); padding: 16px; border-radius: 16px; font-size: 15px; font-weight: 600; margin-top: 15px; cursor: pointer; text-decoration: none; text-align: center; transition: all 0.3s ease; }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); color: white; border-color: rgba(255, 255, 255, 0.4); }
+        .btn-secondary:active { transform: scale(0.97); }
+
         .footer-text { margin-top: 40px; font-size: 12px; color: rgba(255,255,255,0.4); text-align: center; }
     </style>
 </head>
@@ -74,13 +80,15 @@
         </div>
 
         <button id="btnMaps" class="btn-action" onclick="bukaMaps()">Buka di Google Maps</button>
+        
+        <!-- Tombol Tambahan ke Halaman Monitoring -->
+        <a href="monitoring.html" class="btn-secondary">📡 Buka Peta Live Monitoring</a>
+
     </div>
     <div class="footer-text">Created for Field Technicians • RnBNET</div>
 
-    <!-- INI ADALAH KODE UNTUK MEMANGGIL FILE DATABASE ODP ANDA -->
     <script src="data-odp.js"></script>
 
-    <!-- INI ADALAH LOGIKA APLIKASINYA -->
     <script>
         function updateJalur() {
             const serverSelect = document.getElementById("server").value;
