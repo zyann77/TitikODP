@@ -86,8 +86,14 @@
         /* === VIEW 2: MAP NOC === */
         #map { width: 100%; height: 100%; z-index: 1; background: #000; }
         
-        /* Darken Satellite Map to pop Neon Lines */
-        .leaflet-layer { filter: brightness(0.3) contrast(1.2) saturate(0.8); }
+        /* CSS Khusus agar peta satelit gelap HANYA untuk Layer NOC */
+        .map-dark-filter { filter: brightness(0.3) contrast(1.2) saturate(0.8); }
+
+        /* Kostumisasi Tampilan Menu Layer Control Leaflet */
+        .leaflet-control-layers { background: rgba(10, 16, 32, 0.85) !important; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border) !important; border-radius: 14px !important; color: #FFF !important; box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important; padding: 6px !important; }
+        .leaflet-control-layers-list { margin-bottom: 0; }
+        .leaflet-control-layers label { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; font-size: 13px; font-weight: 500; display: flex; align-items: center; padding: 4px 0; }
+        .leaflet-control-layers-separator { border-top: 1px solid rgba(255,255,255,0.1) !important; margin: 8px 0 !important; }
 
         .leaflet-popup-content-wrapper { background: rgba(10, 16, 32, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); color: white; border-radius: 18px; padding: 4px; border: 1px solid var(--glass-border); box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
         .leaflet-popup-tip { background: rgba(10, 16, 32, 0.85); backdrop-filter: blur(20px); }
@@ -105,18 +111,12 @@
 
         /* === CUSTOM FIBER OPTIC NODES & LINES === */
         .node-wrapper { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
-        /* Marker ODP Biasa */
         .node-core { width: 10px; height: 10px; border-radius: 50%; background: #FFF; border: 2px solid; animation: pulseNode 2.5s infinite alternate ease-in-out; }
-        /* Marker Server (Uplink) */
         .server-wrapper { display: flex; align-items: center; justify-content: center; position: relative; width: 100%; height: 100%; }
         .server-core { width: 14px; height: 14px; background: #FFF; border: 3px solid #FFD700; border-radius: 50%; box-shadow: 0 0 20px #FFD700, 0 0 40px #FFD700; z-index: 2; }
         .server-ring { position: absolute; width: 35px; height: 35px; border: 1.5px solid #FFD700; border-radius: 50%; animation: ping 2.5s cubic-bezier(0, 0, 0.2, 1) infinite; opacity: 0.8; }
 
-        /* Flowing Data Animation (SVG Dash) */
-        .data-stream {
-            stroke-dasharray: 2 24; /* Partikel kecil, jarak jauh */
-            animation: flowData 1.5s linear infinite;
-        }
+        .data-stream { stroke-dasharray: 2 24; animation: flowData 1.5s linear infinite; }
         
         @keyframes pulseNode { 0% { transform: scale(0.95); filter: brightness(0.8); } 100% { transform: scale(1.2); filter: brightness(1.5); } }
         @keyframes ping { 75%, 100% { transform: scale(2.2); opacity: 0; } }
@@ -247,7 +247,7 @@
             }
         }
 
-        // --- ORIGINAL APP LOGIC (NO CHANGES) ---
+        // --- ORIGINAL APP LOGIC ---
         function updateJalur() {
             const serverSelect = document.getElementById("server").value;
             const jalurSelect = document.getElementById("jalur");
@@ -321,14 +321,33 @@
 
         // --- MAP INITIALIZATION ---
         var map = L.map('map', { zoomControl: false }).setView([-6.5728706, 107.7746767], 16);
-        L.control.zoom({ position: 'topright' }).addTo(map); // Pindah ke kanan atas agar tidak nabrak legend
+        L.control.zoom({ position: 'topleft' }).addTo(map); 
 
-        // Map Satelit sebagai Base Layer
-        L.tileLayer('http://{s}.google.com/vt?lyrs=s,h&x={x}&y={y}&z={z}', { maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'] }).addTo(map);
-
-        // --- NOC NETWORK LOGIC (Warna Spesifik Sesuai Request) ---
+        // Definisikan Pilihan Map Layer
+        var darkSatellite = L.tileLayer('http://{s}.google.com/vt?lyrs=s,h&x={x}&y={y}&z={z}', { 
+            maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'], 
+            className: 'map-dark-filter' // Class khusus untuk efek gelap NOC
+        });
         
-        // 1. Mapping Kelompok Berdasarkan Nama ODP
+        var normalSatellite = L.tileLayer('http://{s}.google.com/vt?lyrs=s,h&x={x}&y={y}&z={z}', { 
+            maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'] 
+        });
+        
+        var googleStreets = L.tileLayer('http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}', { 
+            maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'] 
+        });
+
+        // Set Base Default ke Dark NOC
+        darkSatellite.addTo(map);
+
+        // Tambahkan Tombol Control Layer (Posisi Kanan Atas)
+        L.control.layers({
+            "🛰️ Satelit Dark (NOC)": darkSatellite,
+            "🌍 Satelit Normal": normalSatellite,
+            "🗺️ Peta Jalan": googleStreets
+        }, null, { position: 'topright' }).addTo(map);
+
+        // --- NOC NETWORK LOGIC ---
         const groupMapping = [
             { prefix: "Mahkota 1", color: "var(--c-mahkota1)" },
             { prefix: "Mahkota 2", color: "var(--c-mahkota2)" },
@@ -340,7 +359,6 @@
             { prefix: "Cibarola 1", color: "var(--c-cibarola)" },
         ];
 
-        // 2. Ikon Server Utama (UPLINK GOLD)
         var serverIcon = L.divIcon({
             className: 'custom-div-icon',
             html: `<div class="server-wrapper"><div class="server-core"></div><div class="server-ring"></div></div>`,
@@ -353,11 +371,7 @@
             <a href="https://www.google.com/maps/dir/?api=1&destination=-6.5728706,107.7746767" target="_blank" class="btn-navigasi">Arahkan Rute</a>
         `); 
 
-        // 3. Ekstrak Data dan Kelompokkan berdasarkan Prefix
-        // Ini memastikan ODP 1.1 -> 1.2 -> 1.9 tersambung urut satu garis
         let networkPaths = {};
-        
-        // Inisialisasi wadah untuk tiap group
         groupMapping.forEach(grp => { networkPaths[grp.prefix] = { color: grp.color, nodes: [] }; });
 
         for (const server in dataJaringan) {
@@ -369,7 +383,6 @@
                         const lat = parseFloat(koordinat.split(',')[0].trim());
                         const lng = parseFloat(koordinat.split(',')[1].trim());
 
-                        // Cek nama ODP masuk kelompok mana
                         let matchedPrefix = null;
                         let matchedColor = "#FFFFFF";
 
@@ -382,10 +395,8 @@
                         }
 
                         if (matchedPrefix) {
-                            // Simpan Node ke Kelompok
                             networkPaths[matchedPrefix].nodes.push({ name: namaOdp, lat: lat, lng: lng, jalur: jalur });
 
-                            // Gambar Marker Node Premium
                             const odpIcon = L.divIcon({
                                 className: 'custom-div-icon',
                                 html: `<div class="node-wrapper"><div class="node-core" style="border-color: ${matchedColor}; box-shadow: 0 0 12px ${matchedColor}, inset 0 0 4px ${matchedColor};"></div></div>`,
@@ -403,29 +414,18 @@
             }
         }
 
-        // 4. Gambar Garis Fiber Optic Sesuai Kelompok Secara Terpisah
         for (const groupKey in networkPaths) {
             const groupData = networkPaths[groupKey];
             const nodes = groupData.nodes;
             
             if (nodes.length > 1) {
-                // Urutkan data berdasarkan nama agar garis ditarik urut dari 1.1 ke 1.2 dst (Ascending)
                 nodes.sort((a, b) => a.name.localeCompare(b.name, undefined, {numeric: true}));
-                
-                // Kumpulkan koordinat untuk menarik garis
                 const pathCoords = nodes.map(n => [n.lat, n.lng]);
                 const c = groupData.color;
 
-                // LAYER 1: OUTER GLOW (Lembut transparan)
                 L.polyline(pathCoords, { color: c, weight: 14, opacity: 0.15, lineCap: 'round', lineJoin: 'round', interactive: false }).addTo(map);
-
-                // LAYER 2: INNER NEON GLOW (Cahaya Inti)
                 L.polyline(pathCoords, { color: c, weight: 5, opacity: 0.6, lineCap: 'round', lineJoin: 'round', interactive: false }).addTo(map);
-
-                // LAYER 3: INTI FIBER (Super tipis putih/terang)
                 L.polyline(pathCoords, { color: '#FFFFFF', weight: 1, opacity: 0.9, lineCap: 'round', lineJoin: 'round', interactive: false }).addTo(map);
-
-                // LAYER 4: DATA PARTICLES (Animasi Titik Mengalir)
                 L.polyline(pathCoords, { color: '#FFFFFF', weight: 3, opacity: 1, lineCap: 'round', lineJoin: 'round', interactive: false, className: 'data-stream' }).addTo(map);
             }
         }
