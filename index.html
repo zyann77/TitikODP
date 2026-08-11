@@ -13,150 +13,133 @@
     <style>
         /* === COLOR PALETTE & VARIABLES === */
         :root {
-            --bg-base: #05060A;
+            /* iOS Dark UI Palette */
+            --bg-base: #030408;
             --bg-surface: #0A1020;
             --bg-elevated: #10152E;
             
-            --accent-blue: #0A84FF;
-            --accent-indigo: #5E5CE6;
-            --accent-purple: #BF5AF2;
+            /* NOC Specific Sub-Path Colors */
+            --c-mahkota1: #FFD700; /* Gold / Amber */
+            --c-mahkota2: #0A84FF; /* Electric Blue */
+            --c-mahkota3: #BF5AF2; /* Violet / Purple */
+            --c-mahkota4: #32ADE6; /* Cyan / Turquoise */
+            --c-mahkota5: #FF375F; /* Magenta / Pink */
+            --c-bgsr1:    #30D158; /* Green / Emerald */
+            --c-bgsr2:    #FF9F0A; /* Orange */
+            --c-cibarola: #64D2FF; /* Ice Blue / Sky Blue */
             
             --text-primary: #FFFFFF;
             --text-secondary: rgba(255, 255, 255, 0.72);
             --text-tertiary: rgba(255, 255, 255, 0.45);
             
-            --玻璃-bg: rgba(255, 255, 255, 0.06);
-            --glass-border: rgba(255, 255, 255, 0.10);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.08);
             
             --spring-easing: cubic-bezier(0.32, 0.72, 0, 1);
             --safe-bottom: env(safe-area-inset-bottom, 20px);
         }
 
-        * { 
-            margin: 0; padding: 0; box-sizing: border-box; 
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", system-ui, sans-serif; 
-            -webkit-font-smoothing: antialiased; 
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        body { 
-            background-color: var(--bg-base); color: var(--text-primary); 
-            height: 100dvh; width: 100vw; overflow: hidden; position: relative;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", system-ui, sans-serif; -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg-base); color: var(--text-primary); height: 100dvh; width: 100vw; overflow: hidden; position: relative; }
 
-        /* === ANIMATED AURORA BACKGROUND === */
-        .ambient-bg {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            z-index: -2; overflow: hidden; background: var(--bg-base);
-        }
-        .orb {
-            position: absolute; border-radius: 50%; filter: blur(80px);
-            opacity: 0.4; animation: float 20s infinite ease-in-out alternate;
-        }
-        .orb-1 { width: 300px; height: 300px; background: var(--accent-indigo); top: -10%; left: -10%; }
-        .orb-2 { width: 400px; height: 400px; background: var(--accent-purple); bottom: -20%; right: -10%; animation-delay: -5s; }
-        .orb-3 { width: 250px; height: 250px; background: var(--accent-blue); top: 40%; left: 40%; animation-delay: -10s; opacity: 0.2; }
-        
-        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(30px, 50px) scale(1.2); } }
-
-        /* === FLOATING DECORATIVE ELEMENTS === */
-        .floating-elements { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-        .float-icon {
-            position: absolute; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border);
-            border-radius: 50%; padding: 12px; color: var(--text-tertiary); backdrop-filter: blur(10px);
-            animation: slowFloat 15s infinite ease-in-out alternate;
-        }
-        .fi-1 { top: 15%; right: 10%; animation-delay: 0s; }
-        .fi-2 { top: 45%; left: 5%; animation-delay: -3s; }
-        .fi-3 { bottom: 30%; right: 15%; animation-delay: -7s; }
-        @keyframes slowFloat { 0% { transform: translateY(0) rotate(0deg); } 100% { transform: translateY(-30px) rotate(10deg); } }
+        /* === AMBIENT BACKGROUND === */
+        .ambient-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2; overflow: hidden; background: var(--bg-base); }
+        .orb { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.3; animation: float 20s infinite ease-in-out alternate; }
+        .orb-1 { width: 300px; height: 300px; background: var(--c-mahkota2); top: -10%; left: -10%; }
+        .orb-2 { width: 400px; height: 400px; background: var(--c-mahkota3); bottom: -20%; right: -10%; animation-delay: -5s; }
+        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(30px, 50px) scale(1.1); } }
 
         /* === SLIDER STRUCTURE === */
         .app-slider { display: flex; width: 200vw; height: 100dvh; transition: transform 0.6s var(--spring-easing); }
         .view-search, .view-map { width: 100vw; height: 100%; position: relative; }
 
-        /* === VIEW 1: SEARCH === */
+        /* === VIEW 1: SEARCH (iOS PREMIUM) === */
         .view-search { overflow-y: auto; padding-bottom: calc(90px + var(--safe-bottom)); }
 
-        .header { padding: 20px; text-align: center; background: linear-gradient(180deg, rgba(5,6,10,0.8) 0%, rgba(5,6,10,0) 100%); animation: fadeInDown 0.8s var(--spring-easing); }
+        .header { padding: 20px; text-align: center; background: linear-gradient(180deg, rgba(3,4,8,0.9) 0%, rgba(3,4,8,0) 100%); animation: fadeInDown 0.8s var(--spring-easing); }
         .header-pill { display: inline-block; background: var(--glass-bg); border: 1px solid var(--glass-border); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 500; color: var(--text-secondary); box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
 
         .hero { text-align: center; padding: 20px 20px 30px; animation: fadeInUp 0.8s var(--spring-easing) 0.1s both; }
-        .hero-icon-wrapper { width: 72px; height: 72px; margin: 0 auto 16px; background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); border: 1px solid var(--glass-border); border-radius: 22px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(10, 132, 255, 0.2), inset 0 1px 0 rgba(255,255,255,0.2); position: relative; }
-        .hero-icon-wrapper::after { content: ''; position: absolute; inset: -1px; border-radius: 23px; background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); z-index: -1; opacity: 0.5; filter: blur(10px); }
+        .hero-icon-wrapper { width: 72px; height: 72px; margin: 0 auto 16px; background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.01)); border: 1px solid var(--glass-border); border-radius: 22px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(10, 132, 255, 0.15), inset 0 1px 0 rgba(255,255,255,0.1); position: relative; }
+        .hero-icon-wrapper::after { content: ''; position: absolute; inset: -1px; border-radius: 23px; background: linear-gradient(135deg, var(--c-mahkota2), var(--c-mahkota3)); z-index: -1; opacity: 0.4; filter: blur(12px); }
         .hero h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.5px; background: linear-gradient(135deg, #FFF, #A5B4FC); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 6px; }
         .hero p { font-size: 14px; color: var(--text-secondary); }
 
         .container { padding: 0 20px; }
-        .glass-card { background: var(--glass-bg); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid var(--glass-border); border-radius: 32px; padding: 24px; box-shadow: 0 24px 40px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1); animation: fadeInUp 0.8s var(--spring-easing) 0.2s both; position: relative; overflow: hidden; }
-        .glass-card::before { content: ''; position: absolute; top: 0; left: 20%; width: 60%; height: 100%; background: radial-gradient(ellipse at top, rgba(94, 92, 230, 0.15) 0%, transparent 70%); pointer-events: none; }
+        .glass-card { background: var(--glass-bg); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid var(--glass-border); border-radius: 32px; padding: 24px; box-shadow: 0 24px 40px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05); animation: fadeInUp 0.8s var(--spring-easing) 0.2s both; position: relative; overflow: hidden; }
+        .glass-card::before { content: ''; position: absolute; top: 0; left: 20%; width: 60%; height: 100%; background: radial-gradient(ellipse at top, rgba(94, 92, 230, 0.1) 0%, transparent 70%); pointer-events: none; }
 
         .input-group { position: relative; margin-bottom: 16px; }
-        .input-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--accent-blue); width: 20px; height: 20px; pointer-events: none; }
+        .input-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--c-mahkota2); width: 20px; height: 20px; pointer-events: none; }
         .input-arrow { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); color: var(--text-tertiary); width: 18px; height: 18px; pointer-events: none; transition: color 0.3s; }
         
-        select { width: 100%; height: 60px; background: rgba(0, 0, 0, 0.2); color: var(--text-primary); border: 1px solid rgba(255, 255, 255, 0.05); padding: 0 45px 0 50px; font-size: 15px; font-weight: 500; border-radius: 20px; appearance: none; outline: none; cursor: pointer; transition: all 0.3s var(--spring-easing); }
+        select { width: 100%; height: 60px; background: rgba(0, 0, 0, 0.25); color: var(--text-primary); border: 1px solid rgba(255, 255, 255, 0.05); padding: 0 45px 0 50px; font-size: 15px; font-weight: 500; border-radius: 20px; appearance: none; outline: none; cursor: pointer; transition: all 0.3s var(--spring-easing); }
         select:focus { background: rgba(10, 132, 255, 0.1); border-color: rgba(10, 132, 255, 0.5); box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.15); }
         select:active { transform: scale(0.98); }
-        select:disabled { opacity: 0.5; }
+        select:disabled { opacity: 0.4; }
         select option { background: var(--bg-elevated); color: var(--text-primary); }
 
-        .btn-action { width: 100%; height: 60px; background: linear-gradient(135deg, var(--accent-blue), var(--accent-indigo)); color: white; border: none; border-radius: 20px; font-size: 16px; font-weight: 600; margin-top: 10px; cursor: pointer; display: none; box-shadow: 0 8px 25px rgba(94, 92, 230, 0.4), inset 0 1px 0 rgba(255,255,255,0.2); transition: all 0.3s var(--spring-easing); position: relative; overflow: hidden; }
+        .btn-action { width: 100%; height: 60px; background: linear-gradient(135deg, #0A84FF, #5E5CE6); color: white; border: none; border-radius: 20px; font-size: 16px; font-weight: 600; margin-top: 10px; cursor: pointer; display: none; box-shadow: 0 8px 25px rgba(94, 92, 230, 0.3), inset 0 1px 0 rgba(255,255,255,0.2); transition: all 0.3s var(--spring-easing); position: relative; overflow: hidden; }
         .btn-action::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent); transform: skewX(-20deg); animation: shimmer 3s infinite; }
-        .btn-action:active { transform: scale(0.96); box-shadow: 0 4px 15px rgba(94, 92, 230, 0.3); }
+        .btn-action:active { transform: scale(0.96); box-shadow: 0 4px 15px rgba(94, 92, 230, 0.2); }
 
-        /* === VIEW 2: MAP === */
-        #map { width: 100%; height: 100%; z-index: 1; }
+        /* === VIEW 2: MAP NOC === */
+        #map { width: 100%; height: 100%; z-index: 1; background: #000; }
         
-        .leaflet-popup-content-wrapper { background: rgba(16, 21, 46, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); color: white; border-radius: 20px; padding: 5px; border: 1px solid var(--glass-border); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .leaflet-popup-tip { background: rgba(16, 21, 46, 0.85); backdrop-filter: blur(20px); }
-        .leaflet-popup-content { margin: 12px; min-width: 180px; text-align: center; }
-        .leaflet-popup-content b { color: #FFF; font-size: 16px; font-weight: 600; display: block; margin-bottom: 4px; }
-        
-        .btn-navigasi { display: flex; align-items: center; justify-content: center; gap: 6px; background: linear-gradient(135deg, var(--accent-blue), var(--accent-indigo)); color: white !important; padding: 12px; border-radius: 14px; text-decoration: none; font-weight: 600; font-size: 14px; margin-top: 14px; box-shadow: 0 4px 15px rgba(10, 132, 255, 0.3); }
+        /* Darken Satellite Map to pop Neon Lines */
+        .leaflet-layer { filter: brightness(0.3) contrast(1.2) saturate(0.8); }
 
-        /* === CUSTOM MAP NODES & NEON ANIMATION === */
+        .leaflet-popup-content-wrapper { background: rgba(10, 16, 32, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); color: white; border-radius: 18px; padding: 4px; border: 1px solid var(--glass-border); box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
+        .leaflet-popup-tip { background: rgba(10, 16, 32, 0.85); backdrop-filter: blur(20px); }
+        .leaflet-popup-content { margin: 12px; min-width: 170px; text-align: center; }
+        .leaflet-popup-content b { font-size: 16px; font-weight: 600; display: block; margin-bottom: 2px; }
+        
+        .btn-navigasi { display: flex; align-items: center; justify-content: center; gap: 6px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); color: white !important; padding: 10px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 13px; margin-top: 12px; transition: all 0.2s; }
+        .btn-navigasi:active { background: rgba(255,255,255,0.2); transform: scale(0.97); }
+
+        /* === NOC LEGEND === */
+        .noc-legend { position: absolute; bottom: calc(95px + var(--safe-bottom)); left: 15px; z-index: 400; background: rgba(5, 6, 10, 0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 18px; padding: 15px 18px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); font-size: 11px; font-weight: 600; letter-spacing: 0.5px; }
+        .legend-item { display: flex; align-items: center; margin-bottom: 10px; color: var(--text-secondary); }
+        .legend-item:last-child { margin-bottom: 0; }
+        .legend-color { width: 10px; height: 10px; border-radius: 50%; margin-right: 12px; box-shadow: 0 0 10px currentColor; }
+
+        /* === CUSTOM FIBER OPTIC NODES & LINES === */
         .node-wrapper { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
-        .node-core { width: 10px; height: 10px; border-radius: 50%; background: white; border: 2px solid; animation: pulseNode 2s infinite alternate; }
-        
+        /* Marker ODP Biasa */
+        .node-core { width: 10px; height: 10px; border-radius: 50%; background: #FFF; border: 2px solid; animation: pulseNode 2.5s infinite alternate ease-in-out; }
+        /* Marker Server (Uplink) */
         .server-wrapper { display: flex; align-items: center; justify-content: center; position: relative; width: 100%; height: 100%; }
-        .server-core { width: 14px; height: 14px; background: #FFD700; border-radius: 50%; box-shadow: 0 0 15px #FFD700, 0 0 30px #FFD700; z-index: 2; }
-        .server-ring { position: absolute; width: 30px; height: 30px; border: 2px solid #FFD700; border-radius: 50%; animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite; opacity: 0.8; }
+        .server-core { width: 14px; height: 14px; background: #FFF; border: 3px solid #FFD700; border-radius: 50%; box-shadow: 0 0 20px #FFD700, 0 0 40px #FFD700; z-index: 2; }
+        .server-ring { position: absolute; width: 35px; height: 35px; border: 1.5px solid #FFD700; border-radius: 50%; animation: ping 2.5s cubic-bezier(0, 0, 0.2, 1) infinite; opacity: 0.8; }
 
-        .data-stream { stroke-dasharray: 6 12; animation: flowData 1.2s linear infinite; }
+        /* Flowing Data Animation (SVG Dash) */
+        .data-stream {
+            stroke-dasharray: 2 24; /* Partikel kecil, jarak jauh */
+            animation: flowData 1.5s linear infinite;
+        }
         
-        @keyframes pulseNode { 0% { transform: scale(1); filter: brightness(1); } 100% { transform: scale(1.3); filter: brightness(1.5); } }
-        @keyframes ping { 75%, 100% { transform: scale(2); opacity: 0; } }
-        @keyframes flowData { from { stroke-dashoffset: 24; } to { stroke-dashoffset: 0; } }
+        @keyframes pulseNode { 0% { transform: scale(0.95); filter: brightness(0.8); } 100% { transform: scale(1.2); filter: brightness(1.5); } }
+        @keyframes ping { 75%, 100% { transform: scale(2.2); opacity: 0; } }
+        @keyframes flowData { from { stroke-dashoffset: 26; } to { stroke-dashoffset: 0; } }
 
         /* === FLOATING BOTTOM NAVIGATION === */
         .bottom-nav-container { position: fixed; bottom: var(--safe-bottom); left: 0; width: 100%; padding: 0 20px; z-index: 1000; display: flex; justify-content: center; }
-        .bottom-nav { background: rgba(20, 20, 30, 0.65); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 30px; display: flex; width: 100%; max-width: 350px; padding: 6px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); animation: slideUpNav 0.8s var(--spring-easing) 0.3s both; }
+        .bottom-nav { background: rgba(15, 20, 30, 0.7); backdrop-filter: saturate(180%) blur(30px); -webkit-backdrop-filter: saturate(180%) blur(30px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 30px; display: flex; width: 100%; max-width: 350px; padding: 6px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
         .nav-item { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; border-radius: 24px; color: var(--text-tertiary); cursor: pointer; transition: all 0.4s var(--spring-easing); font-size: 13px; font-weight: 500; }
         .nav-item i { width: 18px; height: 18px; transition: all 0.4s; }
-        
-        .nav-item.active { background: rgba(10, 132, 255, 0.15); color: var(--text-primary); box-shadow: inset 0 0 0 1px rgba(10, 132, 255, 0.2); }
-        .nav-item.active i { color: var(--accent-blue); filter: drop-shadow(0 0 8px rgba(10,132,255,0.6)); }
+        .nav-item.active { background: rgba(255,255,255,0.08); color: var(--text-primary); }
+        .nav-item.active i { color: #FFF; filter: drop-shadow(0 0 8px rgba(255,255,255,0.5)); }
 
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideUpNav { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes shimmer { 100% { left: 200%; } }
         @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <!-- Ambient Animated Background -->
     <div class="ambient-bg">
-        <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
-    </div>
-
-    <!-- Floating Decorative Icons -->
-    <div class="floating-elements">
-        <i data-lucide="server" class="float-icon fi-1"></i>
-        <i data-lucide="network" class="float-icon fi-2"></i>
-        <i data-lucide="radio" class="float-icon fi-3"></i>
+        <div class="orb orb-1"></div><div class="orb orb-2"></div>
     </div>
 
     <!-- Main Slider -->
@@ -213,6 +196,19 @@
 
         <!-- === RIGHT VIEW: LIVE MAPS NOC === -->
         <div class="view-map">
+            
+            <!-- Automated NOC Legend -->
+            <div class="noc-legend">
+                <div class="legend-item"><div class="legend-color" style="color: var(--c-mahkota1); background: var(--c-mahkota1);"></div> Mahkota 1</div>
+                <div class="legend-item"><div class="legend-color" style="color: var(--c-mahkota2); background: var(--c-mahkota2);"></div> Mahkota 2</div>
+                <div class="legend-item"><div class="legend-color" style="color: var(--c-mahkota3); background: var(--c-mahkota3);"></div> Mahkota 3</div>
+                <div class="legend-item"><div class="legend-color" style="color: var(--c-mahkota4); background: var(--c-mahkota4);"></div> Mahkota 4</div>
+                <div class="legend-item"><div class="legend-color" style="color: var(--c-mahkota5); background: var(--c-mahkota5);"></div> Mahkota 5</div>
+                <div class="legend-item"><div class="legend-color" style="color: var(--c-bgsr1); background: var(--c-bgsr1);"></div> BGSR 1</div>
+                <div class="legend-item"><div class="legend-color" style="color: var(--c-bgsr2); background: var(--c-bgsr2);"></div> BGSR 2</div>
+                <div class="legend-item"><div class="legend-color" style="color: var(--c-cibarola); background: var(--c-cibarola);"></div> Cibarola 1</div>
+            </div>
+
             <div id="map"></div>
         </div>
 
@@ -225,7 +221,7 @@
                 <i data-lucide="search"></i><span>Pencarian ODP</span>
             </div>
             <div class="nav-item" id="tabMap" onclick="slideLayar('kanan')">
-                <i data-lucide="map"></i><span>Live Maps</span>
+                <i data-lucide="radio"></i><span>Live Maps</span>
             </div>
         </div>
     </div>
@@ -251,7 +247,7 @@
             }
         }
 
-        // --- ORIGINAL APP LOGIC ---
+        // --- ORIGINAL APP LOGIC (NO CHANGES) ---
         function updateJalur() {
             const serverSelect = document.getElementById("server").value;
             const jalurSelect = document.getElementById("jalur");
@@ -325,26 +321,26 @@
 
         // --- MAP INITIALIZATION ---
         var map = L.map('map', { zoomControl: false }).setView([-6.5728706, 107.7746767], 16);
-        L.control.zoom({ position: 'topleft' }).addTo(map);
+        L.control.zoom({ position: 'topright' }).addTo(map); // Pindah ke kanan atas agar tidak nabrak legend
 
-        var googleHybrid = L.tileLayer('http://{s}.google.com/vt?lyrs=s,h&x={x}&y={y}&z={z}', { maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'] }).addTo(map);
-        var googleStreets = L.tileLayer('http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}', { maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'] });
+        // Map Satelit sebagai Base Layer
+        L.tileLayer('http://{s}.google.com/vt?lyrs=s,h&x={x}&y={y}&z={z}', { maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'] }).addTo(map);
 
-        L.control.layers({ "🛰️ Peta Satelit": googleHybrid, "🗺️ Peta Jalan": googleStreets }, null, { position: 'topright' }).addTo(map);
-
-        // --- RENDER JALUR DENGAN WARNA BERBEDA TIAP SUB-JALUR ---
+        // --- NOC NETWORK LOGIC (Warna Spesifik Sesuai Request) ---
         
-        // Daftar palet warna neon eksklusif untuk tiap sub-jalur
-        const subJalurColors = [
-            '#0A84FF', // Electric Blue (Jalur A)
-            '#BF5AF2', // Neon Purple (Jalur B)
-            '#32ADE6', // Cyan Turquoise (Jalur C)
-            '#FF9F0A', // Amber Gold (Jalur D)
-            '#FF375F', // Pink Neon (Jalur E)
-            '#30D158'  // Apple Green (Jalur F)
+        // 1. Mapping Kelompok Berdasarkan Nama ODP
+        const groupMapping = [
+            { prefix: "Mahkota 1", color: "var(--c-mahkota1)" },
+            { prefix: "Mahkota 2", color: "var(--c-mahkota2)" },
+            { prefix: "Mahkota 3", color: "var(--c-mahkota3)" },
+            { prefix: "Mahkota 4", color: "var(--c-mahkota4)" },
+            { prefix: "Mahkota 5", color: "var(--c-mahkota5)" },
+            { prefix: "BGSR 1", color: "var(--c-bgsr1)" },
+            { prefix: "BGSR 2", color: "var(--c-bgsr2)" },
+            { prefix: "Cibarola 1", color: "var(--c-cibarola)" },
         ];
 
-        // Ikon Server Utama
+        // 2. Ikon Server Utama (UPLINK GOLD)
         var serverIcon = L.divIcon({
             className: 'custom-div-icon',
             html: `<div class="server-wrapper"><div class="server-core"></div><div class="server-ring"></div></div>`,
@@ -352,74 +348,88 @@
         });
 
         L.marker([-6.5728706, 107.7746767], {icon: serverIcon}).addTo(map).bindPopup(`
-            <b style="color: #FFD700; text-shadow: 0 0 10px rgba(255,215,0,0.5);">SERVER CIBAROLA</b>
-            <span style="font-size: 13px; color: rgba(255,255,255,0.6);">Titik Pusat Induk</span>
-            <a href="https://www.google.com/maps/dir/?api=1&destination=-6.5728706,107.7746767" target="_blank" class="btn-navigasi">
-                <i data-lucide="target" style="width: 16px; height: 16px;"></i> Arahkan Rute
-            </a>
+            <b style="color: var(--c-mahkota1); text-shadow: 0 0 10px rgba(255,215,0,0.5);">SERVER CIBAROLA</b>
+            <span style="font-size: 13px; color: rgba(255,255,255,0.6);">Uplink Utama</span>
+            <a href="https://www.google.com/maps/dir/?api=1&destination=-6.5728706,107.7746767" target="_blank" class="btn-navigasi">Arahkan Rute</a>
         `); 
 
-        let globalSubIndex = 0;
+        // 3. Ekstrak Data dan Kelompokkan berdasarkan Prefix
+        // Ini memastikan ODP 1.1 -> 1.2 -> 1.9 tersambung urut satu garis
+        let networkPaths = {};
+        
+        // Inisialisasi wadah untuk tiap group
+        groupMapping.forEach(grp => { networkPaths[grp.prefix] = { color: grp.color, nodes: [] }; });
 
         for (const server in dataJaringan) {
             for (const jalur in dataJaringan[server]) {
-                
-                // Ambil daftar titik dalam satu jalur (misal: "Perumahan Mahkota Graha", "BGSR", dll)
-                const dataTitik = dataJaringan[server][jalur];
-                
-                // Kita kelompokkan atau pisahkan perkumpulan titik berdasarkan awalan atau urutan 
-                // agar Mahkota 1, Mahkota 2, dst memiliki segmen warna garis tersendiri.
-                // Disini kita buat setiap sub-kelompok nama jalur mendapat warna unik otomatis:
-                let currentSubColor = subJalurColors[globalSubIndex % subJalurColors.length];
-                globalSubIndex++;
-
-                let urutanKoordinat = [];
-
-                for (const namaOdp in dataTitik) {
-                    const koordinat = dataTitik[namaOdp];
+                for (const namaOdp in dataJaringan[server][jalur]) {
+                    const koordinat = dataJaringan[server][jalur][namaOdp];
                     
                     if (koordinat !== "") {
                         const lat = parseFloat(koordinat.split(',')[0].trim());
                         const lng = parseFloat(koordinat.split(',')[1].trim());
 
-                        urutanKoordinat.push([lat, lng]);
+                        // Cek nama ODP masuk kelompok mana
+                        let matchedPrefix = null;
+                        let matchedColor = "#FFFFFF";
 
-                        // Custom Node ODP dengan warna selaras jalurnya
-                        const odpIcon = L.divIcon({
-                            className: 'custom-div-icon',
-                            html: `<div class="node-wrapper"><div class="node-core" style="border-color: ${currentSubColor}; box-shadow: 0 0 12px ${currentSubColor};"></div></div>`,
-                            iconSize: [16, 16], iconAnchor: [8, 8]
-                        });
+                        for (const mapItem of groupMapping) {
+                            if (namaOdp.startsWith(mapItem.prefix)) {
+                                matchedPrefix = mapItem.prefix;
+                                matchedColor = mapItem.color;
+                                break;
+                            }
+                        }
 
-                        L.marker([lat, lng], {icon: odpIcon}).addTo(map).bindPopup(`
-                            <b style="color: ${currentSubColor}; text-shadow: 0 0 8px ${currentSubColor};">${namaOdp}</b>
-                            <span style="font-size: 12px; color: rgba(255,255,255,0.6);">${jalur}</span>
-                            <a href="https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}" target="_blank" class="btn-navigasi">
-                                <i data-lucide="map-pin" style="width: 16px; height: 16px;"></i> Arahkan Rute
-                            </a>
-                        `);
+                        if (matchedPrefix) {
+                            // Simpan Node ke Kelompok
+                            networkPaths[matchedPrefix].nodes.push({ name: namaOdp, lat: lat, lng: lng, jalur: jalur });
+
+                            // Gambar Marker Node Premium
+                            const odpIcon = L.divIcon({
+                                className: 'custom-div-icon',
+                                html: `<div class="node-wrapper"><div class="node-core" style="border-color: ${matchedColor}; box-shadow: 0 0 12px ${matchedColor}, inset 0 0 4px ${matchedColor};"></div></div>`,
+                                iconSize: [16, 16], iconAnchor: [8, 8]
+                            });
+
+                            L.marker([lat, lng], {icon: odpIcon}).addTo(map).bindPopup(`
+                                <b style="color: ${matchedColor}; text-shadow: 0 0 10px ${matchedColor};">${namaOdp}</b>
+                                <span style="font-size: 12px; color: rgba(255,255,255,0.6);">${jalur}</span>
+                                <a href="https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}" target="_blank" class="btn-navigasi">Arahkan Rute</a>
+                            `);
+                        }
                     }
-                }
-
-                // Gambar garis rute penghubung antar titik dengan warna unik sub-jalur tersebut
-                if (urutanKoordinat.length > 1) {
-                    // Outer Glow
-                    L.polyline(urutanKoordinat, { color: currentSubColor, weight: 10, opacity: 0.2, lineCap: 'round', interactive: false }).addTo(map);
-                    // Inner Neon
-                    L.polyline(urutanKoordinat, { color: currentSubColor, weight: 4, opacity: 0.5, lineCap: 'round', interactive: false }).addTo(map);
-                    // Core Solid
-                    L.polyline(urutanKoordinat, { color: '#FFFFFF', weight: 1, opacity: 0.9, lineCap: 'round', interactive: false }).addTo(map);
-                    // Aliran Data
-                    L.polyline(urutanKoordinat, { color: '#FFFFFF', weight: 3, opacity: 1, lineCap: 'round', interactive: false, className: 'data-stream' }).addTo(map);
                 }
             }
         }
+
+        // 4. Gambar Garis Fiber Optic Sesuai Kelompok Secara Terpisah
+        for (const groupKey in networkPaths) {
+            const groupData = networkPaths[groupKey];
+            const nodes = groupData.nodes;
+            
+            if (nodes.length > 1) {
+                // Urutkan data berdasarkan nama agar garis ditarik urut dari 1.1 ke 1.2 dst (Ascending)
+                nodes.sort((a, b) => a.name.localeCompare(b.name, undefined, {numeric: true}));
+                
+                // Kumpulkan koordinat untuk menarik garis
+                const pathCoords = nodes.map(n => [n.lat, n.lng]);
+                const c = groupData.color;
+
+                // LAYER 1: OUTER GLOW (Lembut transparan)
+                L.polyline(pathCoords, { color: c, weight: 14, opacity: 0.15, lineCap: 'round', lineJoin: 'round', interactive: false }).addTo(map);
+
+                // LAYER 2: INNER NEON GLOW (Cahaya Inti)
+                L.polyline(pathCoords, { color: c, weight: 5, opacity: 0.6, lineCap: 'round', lineJoin: 'round', interactive: false }).addTo(map);
+
+                // LAYER 3: INTI FIBER (Super tipis putih/terang)
+                L.polyline(pathCoords, { color: '#FFFFFF', weight: 1, opacity: 0.9, lineCap: 'round', lineJoin: 'round', interactive: false }).addTo(map);
+
+                // LAYER 4: DATA PARTICLES (Animasi Titik Mengalir)
+                L.polyline(pathCoords, { color: '#FFFFFF', weight: 3, opacity: 1, lineCap: 'round', lineJoin: 'round', interactive: false, className: 'data-stream' }).addTo(map);
+            }
+        }
         
-        map.on('popupopen', function() { lucide.createIcons(); });
-        
-        const styleSheet = document.createElement("style");
-        styleSheet.innerText = `@keyframes spin { 100% { transform: rotate(360deg); } }`;
-        document.head.appendChild(styleSheet);
     </script>
 </body>
 </html>
