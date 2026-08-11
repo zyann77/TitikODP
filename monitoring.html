@@ -51,20 +51,49 @@
     <!-- Memanggil Library Peta Leaflet -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
-    <!-- Memanggil Data ODP yang sama persis dengan aplikasi sebelumnya -->
+    <!-- Memanggil Data ODP Anda -->
     <script src="data-odp.js"></script>
 
     <script>
         // 1. Inisialisasi Peta (Pusatkan di Server Cibarola)
-        // Koordinat Server Cibarola: -6.5728706, 107.7746767 | Zoom level: 16
         var map = L.map('map').setView([-6.5728706, 107.7746767], 16);
 
-        // 2. Tambahkan Tampilan Peta dari OpenStreetMap (Gratis)
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
+        // 2. MENYIAPKAN LAYER GOOGLE MAPS
+        
+        // A. Google Streets (Standar)
+        var googleStreets = L.tileLayer('http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}', {
+            maxZoom: 20,
+            subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+            attribution: '&copy; Google Maps'
+        });
 
-        // 3. Buat Ikon Khusus untuk Server (Warna Merah/Berbeda)
+        // B. Google Hybrid (Satelit + Nama Jalan/Label)
+        var googleHybrid = L.tileLayer('http://{s}.google.com/vt?lyrs=s,h&x={x}&y={y}&z={z}', {
+            maxZoom: 20,
+            subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+            attribution: '&copy; Google Maps'
+        });
+
+        // C. OpenStreetMap (Sebagai cadangan ringan)
+        var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap'
+        });
+
+        // Set Layer Default yang menyala pertama kali saat web dibuka
+        googleHybrid.addTo(map);
+
+        // 3. MENAMBAHKAN KONTROL PILIHAN LAYER
+        var baseMaps = {
+            "🛰️ Google Satelit": googleHybrid,
+            "🗺️ Google Default": googleStreets,
+            "🌐 OpenStreetMap": osm
+        };
+        
+        // Memunculkan tombol pilihan layer di pojok kanan atas
+        L.control.layers(baseMaps).addTo(map);
+
+        // 4. Buat Ikon Khusus untuk Server
         var serverIcon = L.icon({
             iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
             shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -74,14 +103,13 @@
             shadowSize: [41, 41]
         });
 
-        // 4. Tambahkan Titik Server Cibarola ke Peta
+        // 5. Tambahkan Titik Server Cibarola ke Peta
         L.marker([-6.5728706, 107.7746767], {icon: serverIcon})
             .addTo(map)
             .bindPopup("<b>🏢 SERVER CIBAROLA</b><br>Titik Pusat Induk")
-            .openPopup(); // Otomatis terbuka saat peta dimuat
+            .openPopup(); 
 
-        // 5. Loop (Putar) Data dari data-odp.js untuk menampilkan semua ODP
-        // Fungsi ini otomatis menyebar pin ke seluruh koordinat yang ada di dataJaringan
+        // 6. Loop (Putar) Data dari data-odp.js untuk menampilkan semua ODP
         for (const server in dataJaringan) {
             const daftarJalur = dataJaringan[server];
             
@@ -91,14 +119,11 @@
                 for (const namaOdp in daftarOdp) {
                     const koordinatString = daftarOdp[namaOdp];
                     
-                    // Cek jika koordinat tidak kosong
                     if (koordinatString !== "") {
-                        // Pisahkan latitude dan longitude dari string "-6.xxx,107.xxx"
                         const coords = koordinatString.split(',');
                         const lat = parseFloat(coords[0].trim());
                         const lng = parseFloat(coords[1].trim());
 
-                        // Tambahkan pin biru standar ke peta
                         L.marker([lat, lng])
                             .addTo(map)
                             .bindPopup(`<b>${namaOdp}</b><br>Jalur: ${jalur}<br>Server: ${server}`);
