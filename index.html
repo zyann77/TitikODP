@@ -22,12 +22,19 @@
             --accent-indigo: #5E5CE6;
             --accent-purple: #BF5AF2;
             
+            /* NOC Fiber Optic Palette */
+            --path-gold: #FFD700;
+            --path-purple: #BF5AF2;
+            --path-blue: #0A84FF;
+            --path-cyan: #32ADE6;
+            --path-silver: #E5E5EA;
+            --path-red: #FF453A;
+            
             --text-primary: #FFFFFF;
             --text-secondary: rgba(255, 255, 255, 0.72);
             --text-tertiary: rgba(255, 255, 255, 0.45);
             
             --glass-bg: rgba(255, 255, 255, 0.06);
-            --glass-bg-hover: rgba(255, 255, 255, 0.1);
             --glass-border: rgba(255, 255, 255, 0.10);
             
             --spring-easing: cubic-bezier(0.32, 0.72, 0, 1);
@@ -42,12 +49,8 @@
         }
         
         body { 
-            background-color: var(--bg-base);
-            color: var(--text-primary); 
-            height: 100dvh; 
-            width: 100vw;
-            overflow: hidden; 
-            position: relative;
+            background-color: var(--bg-base); color: var(--text-primary); 
+            height: 100dvh; width: 100vw; overflow: hidden; position: relative;
         }
 
         /* === ANIMATED AURORA BACKGROUND === */
@@ -63,245 +66,114 @@
         .orb-2 { width: 400px; height: 400px; background: var(--accent-purple); bottom: -20%; right: -10%; animation-delay: -5s; }
         .orb-3 { width: 250px; height: 250px; background: var(--accent-blue); top: 40%; left: 40%; animation-delay: -10s; opacity: 0.2; }
         
-        @keyframes float {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(30px, 50px) scale(1.2); }
-        }
+        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(30px, 50px) scale(1.2); } }
 
         /* === FLOATING DECORATIVE ELEMENTS === */
-        .floating-elements {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; pointer-events: none;
-        }
+        .floating-elements { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
         .float-icon {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--glass-border);
-            border-radius: 50%;
-            padding: 12px;
-            color: var(--text-tertiary);
-            backdrop-filter: blur(10px);
+            position: absolute; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border);
+            border-radius: 50%; padding: 12px; color: var(--text-tertiary); backdrop-filter: blur(10px);
             animation: slowFloat 15s infinite ease-in-out alternate;
         }
         .fi-1 { top: 15%; right: 10%; animation-delay: 0s; }
         .fi-2 { top: 45%; left: 5%; animation-delay: -3s; }
         .fi-3 { bottom: 30%; right: 15%; animation-delay: -7s; }
-
-        @keyframes slowFloat {
-            0% { transform: translateY(0) rotate(0deg); }
-            100% { transform: translateY(-30px) rotate(10deg); }
-        }
+        @keyframes slowFloat { 0% { transform: translateY(0) rotate(0deg); } 100% { transform: translateY(-30px) rotate(10deg); } }
 
         /* === SLIDER STRUCTURE === */
-        .app-slider {
-            display: flex; width: 200vw; height: 100dvh;
-            transition: transform 0.6s var(--spring-easing);
-        }
+        .app-slider { display: flex; width: 200vw; height: 100dvh; transition: transform 0.6s var(--spring-easing); }
         .view-search, .view-map { width: 100vw; height: 100%; position: relative; }
 
         /* === VIEW 1: SEARCH === */
-        .view-search {
-            overflow-y: auto; padding-bottom: calc(90px + var(--safe-bottom));
-        }
+        .view-search { overflow-y: auto; padding-bottom: calc(90px + var(--safe-bottom)); }
 
-        /* HEADER */
-        .header {
-            padding: 20px; text-align: center;
-            background: linear-gradient(180deg, rgba(5,6,10,0.8) 0%, rgba(5,6,10,0) 100%);
-            animation: fadeInDown 0.8s var(--spring-easing);
-        }
-        .header-pill {
-            display: inline-block;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            padding: 8px 16px; border-radius: 20px;
-            font-size: 12px; font-weight: 500; color: var(--text-secondary);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-        }
+        .header { padding: 20px; text-align: center; background: linear-gradient(180deg, rgba(5,6,10,0.8) 0%, rgba(5,6,10,0) 100%); animation: fadeInDown 0.8s var(--spring-easing); }
+        .header-pill { display: inline-block; background: var(--glass-bg); border: 1px solid var(--glass-border); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 500; color: var(--text-secondary); box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
 
-        /* HERO SECTION */
-        .hero {
-            text-align: center; padding: 20px 20px 30px;
-            animation: fadeInUp 0.8s var(--spring-easing) 0.1s both;
-        }
-        .hero-icon-wrapper {
-            width: 72px; height: 72px; margin: 0 auto 16px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
-            border: 1px solid var(--glass-border);
-            border-radius: 22px;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 10px 30px rgba(10, 132, 255, 0.2), inset 0 1px 0 rgba(255,255,255,0.2);
-            position: relative;
-        }
-        .hero-icon-wrapper::after {
-            content: ''; position: absolute; inset: -1px; border-radius: 23px;
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-            z-index: -1; opacity: 0.5; filter: blur(10px);
-        }
-        .hero h1 {
-            font-size: 32px; font-weight: 700; letter-spacing: -0.5px;
-            background: linear-gradient(135deg, #FFF, #A5B4FC);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin-bottom: 6px;
-        }
+        .hero { text-align: center; padding: 20px 20px 30px; animation: fadeInUp 0.8s var(--spring-easing) 0.1s both; }
+        .hero-icon-wrapper { width: 72px; height: 72px; margin: 0 auto 16px; background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); border: 1px solid var(--glass-border); border-radius: 22px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(10, 132, 255, 0.2), inset 0 1px 0 rgba(255,255,255,0.2); position: relative; }
+        .hero-icon-wrapper::after { content: ''; position: absolute; inset: -1px; border-radius: 23px; background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); z-index: -1; opacity: 0.5; filter: blur(10px); }
+        .hero h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.5px; background: linear-gradient(135deg, #FFF, #A5B4FC); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 6px; }
         .hero p { font-size: 14px; color: var(--text-secondary); }
 
-        /* MAIN CARD */
         .container { padding: 0 20px; }
-        .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-            border: 1px solid var(--glass-border);
-            border-radius: 32px;
-            padding: 24px;
-            box-shadow: 0 24px 40px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
-            animation: fadeInUp 0.8s var(--spring-easing) 0.2s both;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        /* Subtle Inner Glow in Card */
-        .glass-card::before {
-            content: ''; position: absolute; top: 0; left: 20%; width: 60%; height: 100%;
-            background: radial-gradient(ellipse at top, rgba(94, 92, 230, 0.15) 0%, transparent 70%);
-            pointer-events: none;
-        }
+        .glass-card { background: var(--glass-bg); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid var(--glass-border); border-radius: 32px; padding: 24px; box-shadow: 0 24px 40px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1); animation: fadeInUp 0.8s var(--spring-easing) 0.2s both; position: relative; overflow: hidden; }
+        .glass-card::before { content: ''; position: absolute; top: 0; left: 20%; width: 60%; height: 100%; background: radial-gradient(ellipse at top, rgba(94, 92, 230, 0.15) 0%, transparent 70%); pointer-events: none; }
 
-        /* INPUT GROUPS */
         .input-group { position: relative; margin-bottom: 16px; }
-        .input-icon {
-            position: absolute; left: 18px; top: 50%; transform: translateY(-50%);
-            color: var(--accent-blue); width: 20px; height: 20px; pointer-events: none;
-        }
-        .input-arrow {
-            position: absolute; right: 18px; top: 50%; transform: translateY(-50%);
-            color: var(--text-tertiary); width: 18px; height: 18px; pointer-events: none;
-            transition: color 0.3s;
-        }
+        .input-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--accent-blue); width: 20px; height: 20px; pointer-events: none; }
+        .input-arrow { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); color: var(--text-tertiary); width: 18px; height: 18px; pointer-events: none; transition: color 0.3s; }
         
-        select {
-            width: 100%; height: 60px;
-            background: rgba(0, 0, 0, 0.2);
-            color: var(--text-primary);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 0 45px 0 50px;
-            font-size: 15px; font-weight: 500;
-            border-radius: 20px;
-            appearance: none; outline: none; cursor: pointer;
-            transition: all 0.3s var(--spring-easing);
-        }
-        
-        select:focus {
-            background: rgba(10, 132, 255, 0.1);
-            border-color: rgba(10, 132, 255, 0.5);
-            box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.15);
-        }
-        
+        select { width: 100%; height: 60px; background: rgba(0, 0, 0, 0.2); color: var(--text-primary); border: 1px solid rgba(255, 255, 255, 0.05); padding: 0 45px 0 50px; font-size: 15px; font-weight: 500; border-radius: 20px; appearance: none; outline: none; cursor: pointer; transition: all 0.3s var(--spring-easing); }
+        select:focus { background: rgba(10, 132, 255, 0.1); border-color: rgba(10, 132, 255, 0.5); box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.15); }
         select:active { transform: scale(0.98); }
         select:disabled { opacity: 0.5; }
         select option { background: var(--bg-elevated); color: var(--text-primary); }
 
-        /* BUTTON ACTION */
-        .btn-action {
-            width: 100%; height: 60px;
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-indigo));
-            color: white; border: none; border-radius: 20px;
-            font-size: 16px; font-weight: 600;
-            margin-top: 10px; cursor: pointer; display: none;
-            box-shadow: 0 8px 25px rgba(94, 92, 230, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
-            transition: all 0.3s var(--spring-easing);
-            position: relative; overflow: hidden;
-        }
-        
-        .btn-action::after {
-            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
-            transform: skewX(-20deg); animation: shimmer 3s infinite;
-        }
-        
-        @keyframes shimmer { 100% { left: 200%; } }
-
+        .btn-action { width: 100%; height: 60px; background: linear-gradient(135deg, var(--accent-blue), var(--accent-indigo)); color: white; border: none; border-radius: 20px; font-size: 16px; font-weight: 600; margin-top: 10px; cursor: pointer; display: none; box-shadow: 0 8px 25px rgba(94, 92, 230, 0.4), inset 0 1px 0 rgba(255,255,255,0.2); transition: all 0.3s var(--spring-easing); position: relative; overflow: hidden; }
+        .btn-action::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent); transform: skewX(-20deg); animation: shimmer 3s infinite; }
         .btn-action:active { transform: scale(0.96); box-shadow: 0 4px 15px rgba(94, 92, 230, 0.3); }
 
         /* === VIEW 2: MAP === */
         #map { width: 100%; height: 100%; z-index: 1; }
         
-        /* Premium Map Popups */
-        .leaflet-popup-content-wrapper { 
-            background: rgba(16, 21, 46, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            color: white; border-radius: 20px; padding: 5px; border: 1px solid var(--glass-border);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
+        .leaflet-popup-content-wrapper { background: rgba(16, 21, 46, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); color: white; border-radius: 20px; padding: 5px; border: 1px solid var(--glass-border); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .leaflet-popup-tip { background: rgba(16, 21, 46, 0.85); backdrop-filter: blur(20px); }
         .leaflet-popup-content { margin: 12px; min-width: 180px; text-align: center; }
         .leaflet-popup-content b { color: #FFF; font-size: 16px; font-weight: 600; display: block; margin-bottom: 4px; }
         
-        .btn-navigasi {
-            display: flex; align-items: center; justify-content: center; gap: 6px;
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-indigo));
-            color: white !important; padding: 12px; border-radius: 14px;
-            text-decoration: none; font-weight: 600; font-size: 14px; margin-top: 14px;
-            box-shadow: 0 4px 15px rgba(10, 132, 255, 0.3);
+        .btn-navigasi { display: flex; align-items: center; justify-content: center; gap: 6px; background: linear-gradient(135deg, var(--accent-blue), var(--accent-indigo)); color: white !important; padding: 12px; border-radius: 14px; text-decoration: none; font-weight: 600; font-size: 14px; margin-top: 14px; box-shadow: 0 4px 15px rgba(10, 132, 255, 0.3); }
+
+        /* === MAP NOC ELEMENTS (LEGEND & MARKERS) === */
+        
+        /* Floating Glass Legend */
+        .noc-legend {
+            position: absolute; bottom: calc(95px + var(--safe-bottom)); left: 15px; z-index: 400;
+            background: rgba(10, 16, 32, 0.7); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border); border-radius: 16px; padding: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5); font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
         }
+        .legend-item { display: flex; align-items: center; margin-bottom: 8px; color: var(--text-secondary); }
+        .legend-item:last-child { margin-bottom: 0; }
+        .legend-color { width: 10px; height: 10px; border-radius: 50%; margin-right: 10px; box-shadow: 0 0 8px currentColor; }
+        
+        /* Custom Node Icons CSS */
+        .node-wrapper { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
+        .node-core { width: 10px; height: 10px; border-radius: 50%; background: white; border: 2px solid; animation: pulseNode 2s infinite alternate; }
+        
+        .server-wrapper { display: flex; align-items: center; justify-content: center; position: relative; width: 100%; height: 100%; }
+        .server-core { width: 14px; height: 14px; background: var(--path-gold); border-radius: 50%; box-shadow: 0 0 15px var(--path-gold), 0 0 30px var(--path-gold); z-index: 2; }
+        .server-ring { position: absolute; width: 30px; height: 30px; border: 2px solid var(--path-gold); border-radius: 50%; animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite; opacity: 0.8; }
+
+        /* Fiber Optic Animation */
+        .data-stream { stroke-dasharray: 6 12; animation: flowData 1s linear infinite; }
+        .data-idle { stroke-dasharray: 4 20; animation: flowData 3s linear infinite; opacity: 0.5; }
+        
+        @keyframes pulseNode { 0% { transform: scale(1); filter: brightness(1); } 100% { transform: scale(1.3); filter: brightness(1.5); } }
+        @keyframes ping { 75%, 100% { transform: scale(2); opacity: 0; } }
+        @keyframes flowData { from { stroke-dashoffset: 24; } to { stroke-dashoffset: 0; } }
 
         /* === FLOATING BOTTOM NAVIGATION === */
-        .bottom-nav-container {
-            position: fixed; bottom: var(--safe-bottom); left: 0; width: 100%;
-            padding: 0 20px; z-index: 1000;
-            display: flex; justify-content: center;
-        }
-        .bottom-nav {
-            background: rgba(20, 20, 30, 0.65);
-            backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 30px;
-            display: flex; width: 100%; max-width: 350px;
-            padding: 6px; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            animation: slideUpNav 0.8s var(--spring-easing) 0.3s both;
-        }
-        .nav-item {
-            flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
-            padding: 12px; border-radius: 24px;
-            color: var(--text-tertiary); cursor: pointer;
-            transition: all 0.4s var(--spring-easing);
-            font-size: 13px; font-weight: 500;
-        }
+        .bottom-nav-container { position: fixed; bottom: var(--safe-bottom); left: 0; width: 100%; padding: 0 20px; z-index: 1000; display: flex; justify-content: center; }
+        .bottom-nav { background: rgba(20, 20, 30, 0.65); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 30px; display: flex; width: 100%; max-width: 350px; padding: 6px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); animation: slideUpNav 0.8s var(--spring-easing) 0.3s both; }
+        .nav-item { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; border-radius: 24px; color: var(--text-tertiary); cursor: pointer; transition: all 0.4s var(--spring-easing); font-size: 13px; font-weight: 500; }
         .nav-item i { width: 18px; height: 18px; transition: all 0.4s; }
         
-        /* Active State Menu */
-        .nav-item.active {
-            background: rgba(10, 132, 255, 0.15);
-            color: var(--text-primary);
-            box-shadow: inset 0 0 0 1px rgba(10, 132, 255, 0.2);
-        }
-        .nav-item.active i {
-            color: var(--accent-blue);
-            filter: drop-shadow(0 0 8px rgba(10,132,255,0.6));
-        }
+        .nav-item.active { background: rgba(10, 132, 255, 0.15); color: var(--text-primary); box-shadow: inset 0 0 0 1px rgba(10, 132, 255, 0.2); }
+        .nav-item.active i { color: var(--accent-blue); filter: drop-shadow(0 0 8px rgba(10,132,255,0.6)); }
 
-        /* Animations Keyframes */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes slideUpNav {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUpNav { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes shimmer { 100% { left: 200%; } }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
     <!-- Ambient Animated Background -->
     <div class="ambient-bg">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
+        <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
     </div>
 
     <!-- Floating Decorative Icons -->
@@ -316,7 +188,6 @@
         
         <!-- === LEFT VIEW: SEARCH === -->
         <div class="view-search">
-            
             <div class="header">
                 <div class="header-pill">RnBNET • Area Cibarola & Sekitarnya</div>
             </div>
@@ -331,7 +202,6 @@
 
             <div class="container">
                 <div class="glass-card">
-                    
                     <div class="input-group">
                         <i data-lucide="server" class="input-icon"></i>
                         <select id="server" onchange="updateJalur()">
@@ -360,17 +230,24 @@
                         <i data-lucide="chevron-down" class="input-arrow"></i>
                     </div>
 
-                    <!-- Button ID retained for logic, text changed as requested -->
-                    <button id="btnMaps" class="btn-action" onclick="bukaMaps()">
-                        Cari ODP
-                    </button>
-                    
+                    <button id="btnMaps" class="btn-action" onclick="bukaMaps()">Cari ODP</button>
                 </div>
             </div>
         </div>
 
-        <!-- === RIGHT VIEW: LIVE MAPS === -->
+        <!-- === RIGHT VIEW: LIVE MAPS NOC === -->
         <div class="view-map">
+            
+            <!-- Glassmorphism NOC Legend -->
+            <div class="noc-legend">
+                <div class="legend-item"><div class="legend-color" style="color: var(--path-gold); background: var(--path-gold);"></div> UPLINK UTAMA</div>
+                <div class="legend-item"><div class="legend-color" style="color: var(--path-purple); background: var(--path-purple);"></div> DISTRIBUSI 1</div>
+                <div class="legend-item"><div class="legend-color" style="color: var(--path-blue); background: var(--path-blue);"></div> DISTRIBUSI 2</div>
+                <div class="legend-item"><div class="legend-color" style="color: var(--path-cyan); background: var(--path-cyan);"></div> DISTRIBUSI 3</div>
+                <div class="legend-item"><div class="legend-color" style="color: var(--path-silver); background: var(--path-silver);"></div> BACKUP</div>
+                <div class="legend-item"><div class="legend-color" style="color: var(--path-red); background: var(--path-red);"></div> ALARM / OFFLINE</div>
+            </div>
+
             <div id="map"></div>
         </div>
 
@@ -380,25 +257,20 @@
     <div class="bottom-nav-container">
         <div class="bottom-nav">
             <div class="nav-item active" id="tabSearch" onclick="slideLayar('kiri')">
-                <i data-lucide="search"></i>
-                <span>Pencarian ODP</span>
+                <i data-lucide="search"></i><span>Pencarian ODP</span>
             </div>
             <div class="nav-item" id="tabMap" onclick="slideLayar('kanan')">
-                <i data-lucide="map"></i>
-                <span>Live Maps</span>
+                <i data-lucide="map"></i><span>Live Maps</span>
             </div>
         </div>
     </div>
 
-    <!-- Required Scripts -->
     <script src="data-odp.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
-        // Render Lucide Icons
         lucide.createIcons();
 
-        // --- UI LOGIC: SLIDE ANIMATION ---
         function slideLayar(arah) {
             const slider = document.getElementById('appSlider');
             const tabSearch = document.getElementById('tabSearch');
@@ -406,19 +278,15 @@
 
             if (arah === 'kiri') {
                 slider.style.transform = 'translateX(0)';
-                tabSearch.classList.add('active');
-                tabMap.classList.remove('active');
+                tabSearch.classList.add('active'); tabMap.classList.remove('active');
             } else if (arah === 'kanan') {
                 slider.style.transform = 'translateX(-100vw)';
-                tabMap.classList.add('active');
-                tabSearch.classList.remove('active');
-                
-                // Invalidate size to fix map rendering issue after sliding
+                tabMap.classList.add('active'); tabSearch.classList.remove('active');
                 setTimeout(() => { map.invalidateSize(); }, 400);
             }
         }
 
-        // --- ORIGINAL APP LOGIC (UNCHANGED) ---
+        // --- ORIGINAL APP LOGIC (TETAP SAMA 100%) ---
         function updateJalur() {
             const serverSelect = document.getElementById("server").value;
             const jalurSelect = document.getElementById("jalur");
@@ -468,16 +336,12 @@
             const btnMaps = document.getElementById("btnMaps");
             if (odpSelect !== "") { 
                 btnMaps.style.display = "block"; 
-                // Add tiny bounce animation when button appears
                 btnMaps.style.animation = "none";
                 setTimeout(() => btnMaps.style.animation = "fadeInUp 0.4s var(--spring-easing)", 10);
-            } else { 
-                btnMaps.style.display = "none"; 
-            }
+            } else { btnMaps.style.display = "none"; }
         }
 
         function bukaMaps() {
-            // Added visual loading simulation on the button before executing original logic
             const btn = document.getElementById("btnMaps");
             const originalText = btn.innerHTML;
             btn.innerHTML = `<i data-lucide="loader-2" class="lucide-spin" style="margin-right:8px; animation: spin 1s linear infinite;"></i> Memproses...`;
@@ -494,47 +358,72 @@
             }, 600);
         }
 
-        // --- MAP INITIALIZATION LOGIC (UNCHANGED CORE, ENHANCED POPUPS) ---
+        // --- MAP INITIALIZATION ---
         var map = L.map('map', { zoomControl: false }).setView([-6.5728706, 107.7746767], 16);
         L.control.zoom({ position: 'topleft' }).addTo(map);
 
-        var googleHybrid = L.tileLayer('http://{s}.google.com/vt?lyrs=s,h&x={x}&y={y}&z={z}', {
-            maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-        }).addTo(map);
+        var googleHybrid = L.tileLayer('http://{s}.google.com/vt?lyrs=s,h&x={x}&y={y}&z={z}', { maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'] }).addTo(map);
+        var googleStreets = L.tileLayer('http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}', { maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'] });
 
-        var googleStreets = L.tileLayer('http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}', {
-            maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+        L.control.layers({ "🛰️ Peta Satelit": googleHybrid, "🗺️ Peta Jalan": googleStreets }, null, { position: 'topright' }).addTo(map);
+
+        // --- MAP NOC: PREMIUM FIBER OPTIC RENDERER ---
+        
+        // 1. Definisikan Palette Warna sesuai arahan
+        const nocColors = [
+            'var(--path-purple)', // Distribusi 1
+            'var(--path-blue)',   // Distribusi 2
+            'var(--path-cyan)',   // Distribusi 3
+            'var(--path-silver)'  // Backup (jika lebih dari 3)
+        ];
+
+        // 2. Ikon Server Utama (UPLINK GOLD)
+        var serverIcon = L.divIcon({
+            className: 'custom-div-icon',
+            html: `<div class="server-wrapper"><div class="server-core"></div><div class="server-ring"></div></div>`,
+            iconSize: [30, 30], iconAnchor: [15, 15]
         });
 
-        L.control.layers({
-            "🛰️ Peta Satelit": googleHybrid,
-            "🗺️ Peta Jalan": googleStreets
-        }, null, { position: 'topright' }).addTo(map);
-
-        var serverIcon = L.icon({
-            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-            iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
-        });
-
+        // Pasang Server
         L.marker([-6.5728706, 107.7746767], {icon: serverIcon}).addTo(map).bindPopup(`
-            <b style="color: #FF453A;">SERVER CIBAROLA</b>
-            <span style="font-size: 13px; color: rgba(255,255,255,0.6);">Titik Pusat Induk</span>
+            <b style="color: var(--path-gold); text-shadow: 0 0 10px rgba(255,215,0,0.5);">SERVER CIBAROLA</b>
+            <span style="font-size: 13px; color: rgba(255,255,255,0.6);">Uplink Utama</span>
             <a href="https://www.google.com/maps/dir/?api=1&destination=-6.5728706,107.7746767" target="_blank" class="btn-navigasi">
                 <i data-lucide="target" style="width: 16px; height: 16px;"></i> Arahkan Rute
             </a>
         `); 
 
+        // 3. Proses Penggambaran Jalur & Node ODP
+        let jalurIndex = 0;
+
         for (const server in dataJaringan) {
             for (const jalur in dataJaringan[server]) {
+                
+                let urutanKoordinat = [];
+                // Tentukan warna berdasar urutan jalur
+                let themeColor = nocColors[jalurIndex % nocColors.length]; 
+                
+                // Jika jalur error / nama khusus (contoh: bisa dikondisikan if name = 'alarm' -> path-red)
+                // Disini kita biarkan dinamis sesuai index
+
                 for (const namaOdp in dataJaringan[server][jalur]) {
                     const koordinat = dataJaringan[server][jalur][namaOdp];
+                    
                     if (koordinat !== "") {
                         const lat = parseFloat(koordinat.split(',')[0].trim());
                         const lng = parseFloat(koordinat.split(',')[1].trim());
 
-                        L.marker([lat, lng]).addTo(map).bindPopup(`
-                            <b>${namaOdp}</b>
+                        urutanKoordinat.push([lat, lng]);
+
+                        // Buat Custom Node Marker (Bukan marker default biru lagi)
+                        const odpIcon = L.divIcon({
+                            className: 'custom-div-icon',
+                            html: `<div class="node-wrapper"><div class="node-core" style="border-color: ${themeColor}; box-shadow: 0 0 12px ${themeColor};"></div></div>`,
+                            iconSize: [16, 16], iconAnchor: [8, 8]
+                        });
+
+                        L.marker([lat, lng], {icon: odpIcon}).addTo(map).bindPopup(`
+                            <b style="color: ${themeColor}; text-shadow: 0 0 8px ${themeColor};">${namaOdp}</b>
                             <span style="font-size: 12px; color: rgba(255,255,255,0.6);">${jalur}</span>
                             <a href="https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}" target="_blank" class="btn-navigasi">
                                 <i data-lucide="map-pin" style="width: 16px; height: 16px;"></i> Arahkan Rute
@@ -542,15 +431,42 @@
                         `);
                     }
                 }
+
+                // 4. Penggambaran Layer Garis Premium Fiber Optic
+                if (urutanKoordinat.length > 1) {
+                    
+                    // Layer 1: Ambient Outer Glow (Soft & Lebar)
+                    L.polyline(urutanKoordinat, {
+                        color: themeColor, weight: 12, opacity: 0.15, 
+                        lineCap: 'round', lineJoin: 'round', interactive: false
+                    }).addTo(map);
+
+                    // Layer 2: Inner Neon Glow (Agak Terang)
+                    L.polyline(urutanKoordinat, {
+                        color: themeColor, weight: 4, opacity: 0.4, 
+                        lineCap: 'round', lineJoin: 'round', interactive: false
+                    }).addTo(map);
+
+                    // Layer 3: Core Solid Line (Inti Putih/Sangat Terang)
+                    L.polyline(urutanKoordinat, {
+                        color: '#FFFFFF', weight: 1, opacity: 0.8, 
+                        lineCap: 'round', lineJoin: 'round', interactive: false
+                    }).addTo(map);
+
+                    // Layer 4: Data Stream Animation (Partikel bergerak)
+                    L.polyline(urutanKoordinat, {
+                        color: '#FFFFFF', weight: 3, opacity: 1, 
+                        lineCap: 'round', lineJoin: 'round', interactive: false,
+                        className: 'data-stream' // Memanggil animasi CSS
+                    }).addTo(map);
+                }
+
+                jalurIndex++;
             }
         }
         
-        // Re-render icons inside popups when opened
-        map.on('popupopen', function() {
-            lucide.createIcons();
-        });
+        map.on('popupopen', function() { lucide.createIcons(); });
         
-        // Keyframe specific for loading spinner
         const styleSheet = document.createElement("style");
         styleSheet.innerText = `@keyframes spin { 100% { transform: rotate(360deg); } }`;
         document.head.appendChild(styleSheet);
