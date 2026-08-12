@@ -18,26 +18,26 @@
             --bg-elevated: #10152E;
             
             /* Warna NOC ODP Sebelumnya */
-            --c-mahkota1: #FFD700; /* Gold / Amber */
-            --c-mahkota2: #0A84FF; /* Electric Blue */
-            --c-mahkota3: #BF5AF2; /* Violet / Purple */
-            --c-mahkota4: #32ADE6; /* Cyan / Turquoise */
-            --c-mahkota5: #FF375F; /* Magenta / Pink */
-            --c-bgsr1:    #30D158; /* Green / Emerald */
-            --c-bgsr2:    #FF9F0A; /* Orange */
-            --c-cibarola: #64D2FF; /* Ice Blue / Sky Blue */
+            --c-mahkota1: #FFD700; 
+            --c-mahkota2: #0A84FF; 
+            --c-mahkota3: #BF5AF2; 
+            --c-mahkota4: #32ADE6; 
+            --c-mahkota5: #FF375F; 
+            --c-bgsr1:    #30D158; 
+            --c-bgsr2:    #FF9F0A; 
+            --c-cibarola: #64D2FF; 
 
             /* Warna NOC untuk Perum */
-            --c-perum1:   #00FF7F; /* Spring Green Neon */
-            --c-perum2:   #FF00FF; /* Fuchsia Neon */
-            --c-perum3:   #FDF500; /* Yellow Neon */
+            --c-perum1:   #00FF7F; 
+            --c-perum2:   #FF00FF; 
+            --c-perum3:   #FDF500; 
             
             /* Warna NOC untuk Sukamelang */
-            --c-pasirceuri1: #FF2D55; /* Radical Red Neon */
-            --c-pasirceuri2: #5E5CE6; /* Indigo Neon */
-            --c-pasirceuri3: #00F5FF; /* Bright Cyan Neon */
-            --c-pasirceuri4: #FF9500; /* Warm Orange Neon */
-            --c-palabuan1:   #E5E5EA; /* Silver / White Neon */
+            --c-pasirceuri1: #FF2D55; 
+            --c-pasirceuri2: #5E5CE6; 
+            --c-pasirceuri3: #00F5FF; 
+            --c-pasirceuri4: #FF9500; 
+            --c-palabuan1:   #E5E5EA; 
             
             --text-primary: #FFFFFF;
             --text-secondary: rgba(255, 255, 255, 0.72);
@@ -64,7 +64,7 @@
         .app-slider { display: flex; width: 200vw; height: 100dvh; transition: transform 0.6s var(--spring-easing); }
         .view-search, .view-map { width: 100vw; height: 100%; position: relative; }
 
-        /* === VIEW 1: SEARCH === */
+        /* === VIEW 1: SEARCH (iOS PREMIUM) === */
         .view-search { overflow-y: auto; padding-bottom: calc(90px + var(--safe-bottom)); }
 
         .header { padding: 20px; text-align: center; background: linear-gradient(180deg, rgba(3,4,8,0.9) 0%, rgba(3,4,8,0) 100%); animation: fadeInDown 0.8s var(--spring-easing); }
@@ -114,27 +114,58 @@
         .leaflet-popup-tip { background: rgba(10, 16, 32, 0.85); }
         .leaflet-popup-content { margin: 12px; min-width: 170px; text-align: center; }
         .leaflet-popup-content b { font-size: 16px; font-weight: 600; display: block; margin-bottom: 2px; }
-        
         .btn-navigasi { display: flex; align-items: center; justify-content: center; gap: 6px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); color: white !important; padding: 10px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 13px; margin-top: 12px; transition: all 0.2s; }
         .btn-navigasi:active { background: rgba(255,255,255,0.2); transform: scale(0.97); }
 
-        /* === NOC LEGEND (DIPERKECIL, TRANSPARAN, KIRI ATAS) === */
-        .noc-legend { 
-            position: absolute; top: 15px; left: 15px; z-index: 400; 
-            background: rgba(10, 16, 32, 0.35); /* Lebih Transparan */
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); 
-            border: 1px solid rgba(255, 255, 255, 0.15); 
-            border-radius: 12px; padding: 10px 12px; 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3); 
-            font-size: 10px; /* Diperkecil */
-            font-weight: 500; letter-spacing: 0.3px; 
-            max-height: 45vh; overflow-y: auto; 
+        /* =========================================================
+           === TOMBOL TOGGLE PENCARIAN/INFO JALUR KIRI ATAS      ===
+           ========================================================= */
+        .btn-legend-toggle {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            z-index: 500;
+            background: rgba(10, 16, 32, 0.7);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 10px 16px;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            transition: all 0.2s cubic-bezier(0.32, 0.72, 0, 1);
         }
-        .noc-legend::-webkit-scrollbar { width: 3px; }
-        .noc-legend::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
-        .legend-item { display: flex; align-items: center; margin-bottom: 6px; color: rgba(255, 255, 255, 0.85); }
+        .btn-legend-toggle:active { transform: scale(0.94); background: rgba(255,255,255,0.1); }
+        
+        /* === KOTAK LEGEND (DISEMBUNYIKAN DEFAULT, MUNCUL KETIKA KLIK) === */
+        .noc-legend { 
+            display: none; /* Sembunyikan default */
+            position: absolute; top: 65px; left: 15px; z-index: 400; 
+            background: rgba(10, 16, 32, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); 
+            border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 16px; 
+            padding: 15px 18px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); 
+            font-size: 11px; font-weight: 600; letter-spacing: 0.5px; 
+            max-height: 50vh; overflow-y: auto; 
+            transform-origin: top left;
+            animation: popIn 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+        }
+        .noc-legend.show { display: block; } /* Class pemicu kemunculan */
+        
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.9) translateY(-10px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .noc-legend::-webkit-scrollbar { width: 4px; }
+        .noc-legend::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+        .legend-item { display: flex; align-items: center; margin-bottom: 10px; color: rgba(255, 255, 255, 0.85); }
         .legend-item:last-child { margin-bottom: 0; }
-        .legend-color { width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; box-shadow: 0 0 6px currentColor; flex-shrink: 0; }
+        .legend-color { width: 10px; height: 10px; border-radius: 50%; margin-right: 12px; box-shadow: 0 0 10px currentColor; flex-shrink: 0; }
 
         /* === TITIK ODP SEDERHANA (DOT MARKER) SETTINGS === */
         .node-wrapper { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; cursor: pointer; }
@@ -222,8 +253,14 @@
         <!-- === RIGHT VIEW: LIVE MAPS NOC === -->
         <div class="view-map">
             
-            <!-- Legend Updated: Smaller, Transparent, Top-Left -->
-            <div class="noc-legend">
+            <!-- Tombol Toggle Info Jalur (Kiri Atas) -->
+            <div class="btn-legend-toggle" onclick="toggleLegend(event)">
+                <i data-lucide="search" style="width: 16px; height: 16px;"></i>
+                <span>Info Warna Jalur</span>
+            </div>
+
+            <!-- Panel Legend yang Disembunyikan (Hanya Muncul Jika Diklik) -->
+            <div class="noc-legend" id="panelLegend">
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-mahkota1); background: var(--c-mahkota1);"></div> Mahkota 1</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-mahkota2); background: var(--c-mahkota2);"></div> Mahkota 2</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-mahkota3); background: var(--c-mahkota3);"></div> Mahkota 3</div>
@@ -282,6 +319,14 @@
             }
         }
 
+        // --- FUNGSI TOGGLE LEGEND INFO WARNA ---
+        function toggleLegend(event) {
+            event.stopPropagation(); // Mencegah klik tembus ke peta
+            const panel = document.getElementById('panelLegend');
+            panel.classList.toggle('show');
+        }
+
+        // --- ORIGINAL APP LOGIC ---
         function updateJalur() {
             const serverSelect = document.getElementById("server").value;
             const jalurSelect = document.getElementById("jalur");
@@ -364,6 +409,11 @@
         darkSatellite.addTo(map);
         L.control.layers({ "🛰️ Satelit Dark (NOC)": darkSatellite, "🌍 Satelit Normal": normalSatellite, "🗺️ Peta Jalan": googleStreets }, null, { position: 'topright' }).addTo(map);
 
+        // Menutup panel Legend jika peta di-klik
+        map.on('click', function() {
+            document.getElementById('panelLegend').classList.remove('show');
+        });
+
         // --- NOC NETWORK LOGIC & PIN MARKERS ---
         const groupMapping = [
             { prefix: "Mahkota 1", color: "var(--c-mahkota1)" },
@@ -414,7 +464,7 @@
                             const odpIcon = L.divIcon({
                                 className: 'custom-div-icon',
                                 html: `<div class="node-wrapper"><div class="node-core" style="border-color: ${matchedColor}; box-shadow: 0 0 10px ${matchedColor};"></div></div>`,
-                                iconSize: [16, 16], iconAnchor: [8, 8] // Jangkar pas di tengah
+                                iconSize: [16, 16], iconAnchor: [8, 8]
                             });
 
                             L.marker([lat, lng], {icon: odpIcon})
