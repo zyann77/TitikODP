@@ -27,10 +27,11 @@
             --c-bgsr2:    #FF9F0A; 
             --c-cibarola: #64D2FF; 
 
-            /* Warna NOC untuk Perum */
+            /* Warna NOC untuk Perum & Puri */
             --c-perum1:   #00FF7F; 
             --c-perum2:   #FF00FF; 
             --c-perum3:   #FDF500; 
+            --c-puri1:    #FF1493; /* Deep Pink Neon */
             
             /* Warna NOC untuk Sukamelang */
             --c-pasirceuri1: #FF2D55; 
@@ -38,7 +39,9 @@
             --c-pasirceuri3: #00F5FF; 
             --c-pasirceuri4: #FF9500; 
             --c-palabuan1:   #E5E5EA; 
-            --c-rancakandong2: #BFFF00; /* Neon Lime Khusus Rancakandong */
+            --c-rancakandong1: #00FFFF; /* Aqua Neon */
+            --c-rancakandong2: #BFFF00; /* Neon Lime */
+            --c-rancakandong4: #9D00FF; /* Proton Purple Neon */
             
             --text-primary: #FFFFFF;
             --text-secondary: rgba(255, 255, 255, 0.72);
@@ -207,6 +210,7 @@
                             <option value="Cibarola">Server Cibarola</option>
                             <option value="Panglejar">Server Panglejar</option>
                             <option value="Perum">Server Perum</option>
+                            <option value="Puri">Server Puri</option>
                             <option value="Sukamelang">Server Sukamelang</option>
                         </select>
                         <i data-lucide="chevron-down" class="input-arrow"></i>
@@ -238,8 +242,8 @@
             
             <!-- Tombol Toggle Info Jalur (Kiri Atas) -->
             <div class="btn-legend-toggle" onclick="toggleLegend(event)">
-                <i data-lucide="search" style="width: 16px; height: 16px;"></i>
-                <span>Info Warna Jalur</span>
+                <i data-lucide="info" style="width: 16px; height: 16px;"></i>
+                <span>Warna Jalur</span>
             </div>
 
             <!-- Panel Legend yang Disembunyikan (Hanya Muncul Jika Diklik) -->
@@ -257,12 +261,17 @@
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-perum2); background: var(--c-perum2);"></div> Perum 2</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-perum3); background: var(--c-perum3);"></div> Perum 3</div>
 
+                <div class="legend-item"><div class="legend-color" style="color: var(--c-puri1); background: var(--c-puri1);"></div> Puri 1</div>
+
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-pasirceuri1); background: var(--c-pasirceuri1);"></div> Pasirceuri 1</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-pasirceuri2); background: var(--c-pasirceuri2);"></div> Pasirceuri 2</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-pasirceuri3); background: var(--c-pasirceuri3);"></div> Pasirceuri 3</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-pasirceuri4); background: var(--c-pasirceuri4);"></div> Pasirceuri 4</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-palabuan1); background: var(--c-palabuan1);"></div> Palabuan 1</div>
+                
+                <div class="legend-item"><div class="legend-color" style="color: var(--c-rancakandong1); background: var(--c-rancakandong1);"></div> Rancakandong 1</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-rancakandong2); background: var(--c-rancakandong2);"></div> Rancakandong 2</div>
+                <div class="legend-item"><div class="legend-color" style="color: var(--c-rancakandong4); background: var(--c-rancakandong4);"></div> Rancakandong 4</div>
             </div>
 
             <div id="map"></div>
@@ -411,12 +420,15 @@
             { prefix: "Perum 1", color: "var(--c-perum1)" },
             { prefix: "Perum 2", color: "var(--c-perum2)" },
             { prefix: "Perum 3", color: "var(--c-perum3)" },
+            { prefix: "Puri 1", color: "var(--c-puri1)" },
             { prefix: "Pasirceuri 1", color: "var(--c-pasirceuri1)" },
             { prefix: "Pasirceuri 2", color: "var(--c-pasirceuri2)" },
             { prefix: "Pasirceuri 3", color: "var(--c-pasirceuri3)" },
             { prefix: "Pasirceuri 4", color: "var(--c-pasirceuri4)" },
             { prefix: "Palabuan 1", color: "var(--c-palabuan1)" },
-            { prefix: "Rancakandong 2", color: "var(--c-rancakandong2)" }
+            { prefix: "Rancakandong 1", color: "var(--c-rancakandong1)" },
+            { prefix: "Rancakandong 2", color: "var(--c-rancakandong2)" },
+            { prefix: "Rancakandong 4", color: "var(--c-rancakandong4)" }
         ];
 
         let networkPaths = {};
@@ -445,7 +457,6 @@
                         if (matchedPrefix) {
                             networkPaths[matchedPrefix].nodes.push({ name: namaOdp, lat: lat, lng: lng, jalur: jalur });
 
-                            // Ikon Titik ODP Sederhana (Dot Marker)
                             const odpIcon = L.divIcon({
                                 className: 'custom-div-icon',
                                 html: `<div class="node-wrapper"><div class="node-core" style="border-color: ${matchedColor}; box-shadow: 0 0 10px ${matchedColor};"></div></div>`,
