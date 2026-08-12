@@ -38,6 +38,7 @@
             --c-pasirceuri3: #00F5FF; 
             --c-pasirceuri4: #FF9500; 
             --c-palabuan1:   #E5E5EA; 
+            --c-rancakandong2: #BFFF00; /* Neon Lime Khusus Rancakandong */
             
             --text-primary: #FFFFFF;
             --text-secondary: rgba(255, 255, 255, 0.72);
@@ -121,45 +122,27 @@
            === TOMBOL TOGGLE PENCARIAN/INFO JALUR KIRI ATAS      ===
            ========================================================= */
         .btn-legend-toggle {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            z-index: 500;
-            background: rgba(10, 16, 32, 0.7);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 20px;
-            padding: 10px 16px;
-            color: #FFFFFF;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            position: absolute; top: 15px; left: 15px; z-index: 500;
+            background: rgba(10, 16, 32, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px;
+            padding: 10px 16px; color: #FFFFFF; display: flex; align-items: center; gap: 8px;
+            font-size: 12px; font-weight: 600; cursor: pointer; box-shadow: 0 8px 25px rgba(0,0,0,0.4);
             transition: all 0.2s cubic-bezier(0.32, 0.72, 0, 1);
         }
         .btn-legend-toggle:active { transform: scale(0.94); background: rgba(255,255,255,0.1); }
         
         /* === KOTAK LEGEND (DISEMBUNYIKAN DEFAULT, MUNCUL KETIKA KLIK) === */
         .noc-legend { 
-            display: none; /* Sembunyikan default */
-            position: absolute; top: 65px; left: 15px; z-index: 400; 
+            display: none; position: absolute; top: 65px; left: 15px; z-index: 400; 
             background: rgba(10, 16, 32, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); 
             border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 16px; 
             padding: 15px 18px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); 
             font-size: 11px; font-weight: 600; letter-spacing: 0.5px; 
-            max-height: 50vh; overflow-y: auto; 
-            transform-origin: top left;
+            max-height: 50vh; overflow-y: auto; transform-origin: top left;
             animation: popIn 0.3s cubic-bezier(0.32, 0.72, 0, 1);
         }
-        .noc-legend.show { display: block; } /* Class pemicu kemunculan */
-        
-        @keyframes popIn {
-            0% { opacity: 0; transform: scale(0.9) translateY(-10px); }
-            100% { opacity: 1; transform: scale(1) translateY(0); }
-        }
+        .noc-legend.show { display: block; }
+        @keyframes popIn { 0% { opacity: 0; transform: scale(0.9) translateY(-10px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
 
         .noc-legend::-webkit-scrollbar { width: 4px; }
         .noc-legend::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
@@ -279,6 +262,7 @@
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-pasirceuri3); background: var(--c-pasirceuri3);"></div> Pasirceuri 3</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-pasirceuri4); background: var(--c-pasirceuri4);"></div> Pasirceuri 4</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-palabuan1); background: var(--c-palabuan1);"></div> Palabuan 1</div>
+                <div class="legend-item"><div class="legend-color" style="color: var(--c-rancakandong2); background: var(--c-rancakandong2);"></div> Rancakandong 2</div>
             </div>
 
             <div id="map"></div>
@@ -431,7 +415,8 @@
             { prefix: "Pasirceuri 2", color: "var(--c-pasirceuri2)" },
             { prefix: "Pasirceuri 3", color: "var(--c-pasirceuri3)" },
             { prefix: "Pasirceuri 4", color: "var(--c-pasirceuri4)" },
-            { prefix: "Palabuan 1", color: "var(--c-palabuan1)" }
+            { prefix: "Palabuan 1", color: "var(--c-palabuan1)" },
+            { prefix: "Rancakandong 2", color: "var(--c-rancakandong2)" }
         ];
 
         let networkPaths = {};
