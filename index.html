@@ -17,6 +17,7 @@
             --bg-surface: #0A1020;
             --bg-elevated: #10152E;
             
+            /* Warna NOC ODP Sebelumnya */
             --c-mahkota1: #FFD700; /* Gold / Amber */
             --c-mahkota2: #0A84FF; /* Electric Blue */
             --c-mahkota3: #BF5AF2; /* Violet / Purple */
@@ -25,6 +26,11 @@
             --c-bgsr1:    #30D158; /* Green / Emerald */
             --c-bgsr2:    #FF9F0A; /* Orange */
             --c-cibarola: #64D2FF; /* Ice Blue / Sky Blue */
+
+            /* Tambahan Warna NOC untuk Perum */
+            --c-perum1:   #00FF7F; /* Spring Green Neon */
+            --c-perum2:   #FF00FF; /* Fuchsia Neon */
+            --c-perum3:   #FDF500; /* Yellow Neon */
             
             --text-primary: #FFFFFF;
             --text-secondary: rgba(255, 255, 255, 0.72);
@@ -105,10 +111,14 @@
         .btn-navigasi { display: flex; align-items: center; justify-content: center; gap: 6px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); color: white !important; padding: 10px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 13px; margin-top: 12px; transition: all 0.2s; }
         .btn-navigasi:active { background: rgba(255,255,255,0.2); transform: scale(0.97); }
 
-        .noc-legend { position: absolute; bottom: calc(95px + var(--safe-bottom)); left: 15px; z-index: 400; background: rgba(5, 6, 10, 0.8); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 18px; padding: 15px 18px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); font-size: 11px; font-weight: 600; letter-spacing: 0.5px; }
+        /* === NOC LEGEND (ADDED SCROLL IF TOO LONG) === */
+        .noc-legend { position: absolute; bottom: calc(95px + var(--safe-bottom)); left: 15px; z-index: 400; background: rgba(5, 6, 10, 0.8); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 18px; padding: 15px 18px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); font-size: 11px; font-weight: 600; letter-spacing: 0.5px; max-height: 250px; overflow-y: auto; }
+        /* Styling Scrollbar Khusus Legend */
+        .noc-legend::-webkit-scrollbar { width: 4px; }
+        .noc-legend::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
         .legend-item { display: flex; align-items: center; margin-bottom: 10px; color: var(--text-secondary); }
         .legend-item:last-child { margin-bottom: 0; }
-        .legend-color { width: 10px; height: 10px; border-radius: 50%; margin-right: 12px; box-shadow: 0 0 10px currentColor; }
+        .legend-color { width: 10px; height: 10px; border-radius: 50%; margin-right: 12px; box-shadow: 0 0 10px currentColor; flex-shrink: 0; }
 
         /* =======================================================
            === TITIK ODP SEDERHANA (DOT MARKER) SETTINGS       === 
@@ -125,7 +135,7 @@
         }
         
         /* Interaksi saat hover/disentuh */
-        .node-wrapper:hover .node-core { transform: scale(1.6); }
+        .node-wrapper:hover .node-core { transform: scale(1.6); z-index: 1000 !important; }
 
         @keyframes pulseNode { 
             0% { transform: scale(0.9); filter: brightness(0.9); } 
@@ -211,6 +221,7 @@
         <!-- === RIGHT VIEW: LIVE MAPS NOC === -->
         <div class="view-map">
             
+            <!-- Legend Updated with Perum Networks -->
             <div class="noc-legend">
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-mahkota1); background: var(--c-mahkota1);"></div> Mahkota 1</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-mahkota2); background: var(--c-mahkota2);"></div> Mahkota 2</div>
@@ -220,6 +231,10 @@
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-bgsr1); background: var(--c-bgsr1);"></div> BGSR 1</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-bgsr2); background: var(--c-bgsr2);"></div> BGSR 2</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-cibarola); background: var(--c-cibarola);"></div> Cibarola 1</div>
+                <!-- Perum Line Colors Added -->
+                <div class="legend-item"><div class="legend-color" style="color: var(--c-perum1); background: var(--c-perum1);"></div> Perum 1</div>
+                <div class="legend-item"><div class="legend-color" style="color: var(--c-perum2); background: var(--c-perum2);"></div> Perum 2</div>
+                <div class="legend-item"><div class="legend-color" style="color: var(--c-perum3); background: var(--c-perum3);"></div> Perum 3</div>
             </div>
 
             <div id="map"></div>
@@ -333,7 +348,8 @@
         }
 
         // --- MAP INITIALIZATION ---
-        var map = L.map('map', { zoomControl: false }).setView([-6.5728706, 107.7746767], 16);
+        // Default map view masih di Mahkota (Cibarola), user bisa zoom out untuk lihat Perum
+        var map = L.map('map', { zoomControl: false }).setView([-6.5728706, 107.7746767], 15);
         L.control.zoom({ position: 'topright' }).addTo(map); 
 
         var darkSatellite = L.tileLayer('http://{s}.google.com/vt?lyrs=s,h&x={x}&y={y}&z={z}', { maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'], className: 'map-dark-filter' });
@@ -344,6 +360,7 @@
         L.control.layers({ "🛰️ Satelit Dark (NOC)": darkSatellite, "🌍 Satelit Normal": normalSatellite, "🗺️ Peta Jalan": googleStreets }, null, { position: 'topright' }).addTo(map);
 
         // --- NOC NETWORK LOGIC & PIN MARKERS ---
+        // Daftar semua prefix nama ODP beserta warna eksklusifnya
         const groupMapping = [
             { prefix: "Mahkota 1", color: "var(--c-mahkota1)" },
             { prefix: "Mahkota 2", color: "var(--c-mahkota2)" },
@@ -353,6 +370,9 @@
             { prefix: "BGSR 1", color: "var(--c-bgsr1)" },
             { prefix: "BGSR 2", color: "var(--c-bgsr2)" },
             { prefix: "Cibarola 1", color: "var(--c-cibarola)" },
+            { prefix: "Perum 1", color: "var(--c-perum1)" },
+            { prefix: "Perum 2", color: "var(--c-perum2)" },
+            { prefix: "Perum 3", color: "var(--c-perum3)" },
         ];
 
         let networkPaths = {};
@@ -414,7 +434,9 @@
             const nodes = groupData.nodes;
             
             if (nodes.length > 1) {
+                // Diurutkan berdasarkan angka di belakang nama agar rutenya berurutan dengan benar (1.1, 1.2, 1.3... 1.10)
                 nodes.sort((a, b) => a.name.localeCompare(b.name, undefined, {numeric: true}));
+                
                 const pathCoords = nodes.map(n => [n.lat, n.lng]);
                 const c = groupData.color;
 
