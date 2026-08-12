@@ -31,17 +31,25 @@
             --c-perum1:   #00FF7F; 
             --c-perum2:   #FF00FF; 
             --c-perum3:   #FDF500; 
-            --c-puri1:    #FF1493; /* Deep Pink Neon */
+            --c-puri1:    #FF1493; 
             
             /* Warna NOC untuk Sukamelang */
             --c-pasirceuri1: #FF2D55; 
             --c-pasirceuri2: #5E5CE6; 
             --c-pasirceuri3: #00F5FF; 
             --c-pasirceuri4: #FF9500; 
-            --c-palabuan1:   #E5E5EA; 
+            --c-palabuan1:   #FF007F; /* Berubah: Dari Putih menjadi Neon Rose */
+            
             --c-rancakandong1: #00FFFF; /* Aqua Neon */
             --c-rancakandong2: #BFFF00; /* Neon Lime */
+            --c-rancakandong3: #FF00FF; /* Magenta Neon */
             --c-rancakandong4: #9D00FF; /* Proton Purple Neon */
+            --c-rancakandong5: #00FF7F; /* Spring Green */
+            
+            --c-cisugih1: #FF4500; /* Neon Orange-Red */
+            --c-cisugih2: #8A2BE2; /* Blue Violet */
+            --c-pramuka1: #00BFFF; /* Deep Sky Blue */
+            --c-sukamelang1: #ADFF2F; /* Green Yellow */
             
             --text-primary: #FFFFFF;
             --text-secondary: rgba(255, 255, 255, 0.72);
@@ -68,7 +76,7 @@
         .app-slider { display: flex; width: 200vw; height: 100dvh; transition: transform 0.6s var(--spring-easing); }
         .view-search, .view-map { width: 100vw; height: 100%; position: relative; }
 
-        /* === VIEW 1: SEARCH (iOS PREMIUM) === */
+        /* === VIEW 1: SEARCH === */
         .view-search { overflow-y: auto; padding-bottom: calc(90px + var(--safe-bottom)); }
 
         .header { padding: 20px; text-align: center; background: linear-gradient(180deg, rgba(3,4,8,0.9) 0%, rgba(3,4,8,0) 100%); animation: fadeInDown 0.8s var(--spring-easing); }
@@ -121,9 +129,7 @@
         .btn-navigasi { display: flex; align-items: center; justify-content: center; gap: 6px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); color: white !important; padding: 10px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 13px; margin-top: 12px; transition: all 0.2s; }
         .btn-navigasi:active { background: rgba(255,255,255,0.2); transform: scale(0.97); }
 
-        /* =========================================================
-           === TOMBOL TOGGLE PENCARIAN/INFO JALUR KIRI ATAS      ===
-           ========================================================= */
+        /* === TOMBOL TOGGLE PENCARIAN/INFO JALUR === */
         .btn-legend-toggle {
             position: absolute; top: 15px; left: 15px; z-index: 500;
             background: rgba(10, 16, 32, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -134,7 +140,7 @@
         }
         .btn-legend-toggle:active { transform: scale(0.94); background: rgba(255,255,255,0.1); }
         
-        /* === KOTAK LEGEND (DISEMBUNYIKAN DEFAULT, MUNCUL KETIKA KLIK) === */
+        /* === KOTAK LEGEND === */
         .noc-legend { 
             display: none; position: absolute; top: 65px; left: 15px; z-index: 400; 
             background: rgba(10, 16, 32, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); 
@@ -248,6 +254,7 @@
 
             <!-- Panel Legend yang Disembunyikan (Hanya Muncul Jika Diklik) -->
             <div class="noc-legend" id="panelLegend">
+                <!-- Group Cibarola -->
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-mahkota1); background: var(--c-mahkota1);"></div> Mahkota 1</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-mahkota2); background: var(--c-mahkota2);"></div> Mahkota 2</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-mahkota3); background: var(--c-mahkota3);"></div> Mahkota 3</div>
@@ -257,21 +264,27 @@
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-bgsr2); background: var(--c-bgsr2);"></div> BGSR 2</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-cibarola); background: var(--c-cibarola);"></div> Cibarola 1</div>
                 
+                <!-- Group Perum & Puri -->
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-perum1); background: var(--c-perum1);"></div> Perum 1</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-perum2); background: var(--c-perum2);"></div> Perum 2</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-perum3); background: var(--c-perum3);"></div> Perum 3</div>
-
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-puri1); background: var(--c-puri1);"></div> Puri 1</div>
 
+                <!-- Group Sukamelang -->
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-pasirceuri1); background: var(--c-pasirceuri1);"></div> Pasirceuri 1</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-pasirceuri2); background: var(--c-pasirceuri2);"></div> Pasirceuri 2</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-pasirceuri3); background: var(--c-pasirceuri3);"></div> Pasirceuri 3</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-pasirceuri4); background: var(--c-pasirceuri4);"></div> Pasirceuri 4</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-palabuan1); background: var(--c-palabuan1);"></div> Palabuan 1</div>
-                
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-rancakandong1); background: var(--c-rancakandong1);"></div> Rancakandong 1</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-rancakandong2); background: var(--c-rancakandong2);"></div> Rancakandong 2</div>
+                <div class="legend-item"><div class="legend-color" style="color: var(--c-rancakandong3); background: var(--c-rancakandong3);"></div> Rancakandong 3</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-rancakandong4); background: var(--c-rancakandong4);"></div> Rancakandong 4</div>
+                <div class="legend-item"><div class="legend-color" style="color: var(--c-rancakandong5); background: var(--c-rancakandong5);"></div> Rancakandong 5</div>
+                <div class="legend-item"><div class="legend-color" style="color: var(--c-cisugih1); background: var(--c-cisugih1);"></div> Cisugih 1</div>
+                <div class="legend-item"><div class="legend-color" style="color: var(--c-cisugih2); background: var(--c-cisugih2);"></div> Cisugih 2</div>
+                <div class="legend-item"><div class="legend-color" style="color: var(--c-pramuka1); background: var(--c-pramuka1);"></div> Pramuka 1</div>
+                <div class="legend-item"><div class="legend-color" style="color: var(--c-sukamelang1); background: var(--c-sukamelang1);"></div> Sukamelang 1</div>
             </div>
 
             <div id="map"></div>
@@ -314,7 +327,7 @@
 
         // --- FUNGSI TOGGLE LEGEND INFO WARNA ---
         function toggleLegend(event) {
-            event.stopPropagation(); // Mencegah klik tembus ke peta
+            event.stopPropagation(); 
             const panel = document.getElementById('panelLegend');
             panel.classList.toggle('show');
         }
@@ -402,7 +415,6 @@
         darkSatellite.addTo(map);
         L.control.layers({ "🛰️ Satelit Dark (NOC)": darkSatellite, "🌍 Satelit Normal": normalSatellite, "🗺️ Peta Jalan": googleStreets }, null, { position: 'topright' }).addTo(map);
 
-        // Menutup panel Legend jika peta di-klik
         map.on('click', function() {
             document.getElementById('panelLegend').classList.remove('show');
         });
@@ -428,7 +440,13 @@
             { prefix: "Palabuan 1", color: "var(--c-palabuan1)" },
             { prefix: "Rancakandong 1", color: "var(--c-rancakandong1)" },
             { prefix: "Rancakandong 2", color: "var(--c-rancakandong2)" },
-            { prefix: "Rancakandong 4", color: "var(--c-rancakandong4)" }
+            { prefix: "Rancakandong 3", color: "var(--c-rancakandong3)" },
+            { prefix: "Rancakandong 4", color: "var(--c-rancakandong4)" },
+            { prefix: "Rancakandong 5", color: "var(--c-rancakandong5)" },
+            { prefix: "Cisugih 1", color: "var(--c-cisugih1)" },
+            { prefix: "Cisugih 2", color: "var(--c-cisugih2)" },
+            { prefix: "Pramuka 1", color: "var(--c-pramuka1)" },
+            { prefix: "Sukamelang 1", color: "var(--c-sukamelang1)" }
         ];
 
         let networkPaths = {};
