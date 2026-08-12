@@ -38,18 +38,21 @@
             --c-pasirceuri2: #5E5CE6; 
             --c-pasirceuri3: #00F5FF; 
             --c-pasirceuri4: #FF9500; 
-            --c-palabuan1:   #FF007F; /* Berubah: Dari Putih menjadi Neon Rose */
+            --c-palabuan1:   #FF007F; 
             
-            --c-rancakandong1: #00FFFF; /* Aqua Neon */
-            --c-rancakandong2: #BFFF00; /* Neon Lime */
-            --c-rancakandong3: #FF00FF; /* Magenta Neon */
-            --c-rancakandong4: #9D00FF; /* Proton Purple Neon */
-            --c-rancakandong5: #00FF7F; /* Spring Green */
+            --c-rancakandong1: #00FFFF; 
+            --c-rancakandong2: #BFFF00; 
+            --c-rancakandong3: #FF00FF; 
+            --c-rancakandong4: #9D00FF; 
+            --c-rancakandong5: #00FF7F; 
             
-            --c-cisugih1: #FF4500; /* Neon Orange-Red */
-            --c-cisugih2: #8A2BE2; /* Blue Violet */
-            --c-pramuka1: #00BFFF; /* Deep Sky Blue */
-            --c-sukamelang1: #ADFF2F; /* Green Yellow */
+            --c-cisugih1: #FF4500; 
+            --c-cisugih2: #8A2BE2; 
+            --c-pramuka1: #00BFFF; 
+            --c-sukamelang1: #ADFF2F; 
+            
+            /* Warna NOC Khusus Flumbon */
+            --c-flumbon1: #FF7F50; /* Neon Coral / Light Salmon */
             
             --text-primary: #FFFFFF;
             --text-secondary: rgba(255, 255, 255, 0.72);
@@ -159,7 +162,7 @@
         .legend-item:last-child { margin-bottom: 0; }
         .legend-color { width: 10px; height: 10px; border-radius: 50%; margin-right: 12px; box-shadow: 0 0 10px currentColor; flex-shrink: 0; }
 
-        /* === TITIK ODP SEDERHANA (DOT MARKER) SETTINGS === */
+        /* === TITIK ODP SEDERHANA (DOT MARKER) === */
         .node-wrapper { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; cursor: pointer; }
         .node-core { width: 12px; height: 12px; border-radius: 50%; background: #FFF; border: 2.5px solid; animation: pulseNode 2s infinite alternate ease-in-out; transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
         .node-wrapper:hover .node-core { transform: scale(1.6); z-index: 1000 !important; }
@@ -167,7 +170,7 @@
         @keyframes pulseNode { 0% { transform: scale(0.9); filter: brightness(0.9); } 100% { transform: scale(1.15); filter: brightness(1.5); } }
         @keyframes pulseDot { 0% { opacity: 0.5; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1.2); } }
 
-        /* Fiber Data Flow (Jalur Peta) */
+        /* Fiber Data Flow */
         .data-stream { stroke-dasharray: 2 28; animation: flowData 1.5s linear infinite; }
         @keyframes flowData { from { stroke-dashoffset: 30; } to { stroke-dashoffset: 0; } }
 
@@ -246,15 +249,12 @@
         <!-- === RIGHT VIEW: LIVE MAPS NOC === -->
         <div class="view-map">
             
-            <!-- Tombol Toggle Info Jalur (Kiri Atas) -->
             <div class="btn-legend-toggle" onclick="toggleLegend(event)">
                 <i data-lucide="info" style="width: 16px; height: 16px;"></i>
                 <span>Warna Jalur</span>
             </div>
 
-            <!-- Panel Legend yang Disembunyikan (Hanya Muncul Jika Diklik) -->
             <div class="noc-legend" id="panelLegend">
-                <!-- Group Cibarola -->
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-mahkota1); background: var(--c-mahkota1);"></div> Mahkota 1</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-mahkota2); background: var(--c-mahkota2);"></div> Mahkota 2</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-mahkota3); background: var(--c-mahkota3);"></div> Mahkota 3</div>
@@ -264,27 +264,28 @@
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-bgsr2); background: var(--c-bgsr2);"></div> BGSR 2</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-cibarola); background: var(--c-cibarola);"></div> Cibarola 1</div>
                 
-                <!-- Group Perum & Puri -->
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-perum1); background: var(--c-perum1);"></div> Perum 1</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-perum2); background: var(--c-perum2);"></div> Perum 2</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-perum3); background: var(--c-perum3);"></div> Perum 3</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-puri1); background: var(--c-puri1);"></div> Puri 1</div>
 
-                <!-- Group Sukamelang -->
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-pasirceuri1); background: var(--c-pasirceuri1);"></div> Pasirceuri 1</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-pasirceuri2); background: var(--c-pasirceuri2);"></div> Pasirceuri 2</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-pasirceuri3); background: var(--c-pasirceuri3);"></div> Pasirceuri 3</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-pasirceuri4); background: var(--c-pasirceuri4);"></div> Pasirceuri 4</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-palabuan1); background: var(--c-palabuan1);"></div> Palabuan 1</div>
+                
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-rancakandong1); background: var(--c-rancakandong1);"></div> Rancakandong 1</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-rancakandong2); background: var(--c-rancakandong2);"></div> Rancakandong 2</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-rancakandong3); background: var(--c-rancakandong3);"></div> Rancakandong 3</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-rancakandong4); background: var(--c-rancakandong4);"></div> Rancakandong 4</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-rancakandong5); background: var(--c-rancakandong5);"></div> Rancakandong 5</div>
+                
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-cisugih1); background: var(--c-cisugih1);"></div> Cisugih 1</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-cisugih2); background: var(--c-cisugih2);"></div> Cisugih 2</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-pramuka1); background: var(--c-pramuka1);"></div> Pramuka 1</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-sukamelang1); background: var(--c-sukamelang1);"></div> Sukamelang 1</div>
+                <div class="legend-item"><div class="legend-color" style="color: var(--c-flumbon1); background: var(--c-flumbon1);"></div> Flumbon 1</div>
             </div>
 
             <div id="map"></div>
@@ -325,14 +326,12 @@
             }
         }
 
-        // --- FUNGSI TOGGLE LEGEND INFO WARNA ---
         function toggleLegend(event) {
             event.stopPropagation(); 
             const panel = document.getElementById('panelLegend');
             panel.classList.toggle('show');
         }
 
-        // --- ORIGINAL APP LOGIC ---
         function updateJalur() {
             const serverSelect = document.getElementById("server").value;
             const jalurSelect = document.getElementById("jalur");
@@ -446,7 +445,8 @@
             { prefix: "Cisugih 1", color: "var(--c-cisugih1)" },
             { prefix: "Cisugih 2", color: "var(--c-cisugih2)" },
             { prefix: "Pramuka 1", color: "var(--c-pramuka1)" },
-            { prefix: "Sukamelang 1", color: "var(--c-sukamelang1)" }
+            { prefix: "Sukamelang 1", color: "var(--c-sukamelang1)" },
+            { prefix: "Flumbon 1", color: "var(--c-flumbon1)" }
         ];
 
         let networkPaths = {};
