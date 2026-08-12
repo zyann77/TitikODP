@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Titik ODP</title>
+    <title>Sistem Navigasi ODP - RnBNET</title>
     
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -32,7 +32,7 @@
             --c-perum2:   #FF00FF; /* Fuchsia Neon */
             --c-perum3:   #FDF500; /* Yellow Neon */
             
-            /* Warna NOC untuk Sukamelang (Pasirceuri & Palabuan) */
+            /* Warna NOC untuk Sukamelang */
             --c-pasirceuri1: #FF2D55; /* Radical Red Neon */
             --c-pasirceuri2: #5E5CE6; /* Indigo Neon */
             --c-pasirceuri3: #00F5FF; /* Bright Cyan Neon */
@@ -64,7 +64,7 @@
         .app-slider { display: flex; width: 200vw; height: 100dvh; transition: transform 0.6s var(--spring-easing); }
         .view-search, .view-map { width: 100vw; height: 100%; position: relative; }
 
-        /* === VIEW 1: SEARCH (iOS PREMIUM) === */
+        /* === VIEW 1: SEARCH === */
         .view-search { overflow-y: auto; padding-bottom: calc(90px + var(--safe-bottom)); }
 
         .header { padding: 20px; text-align: center; background: linear-gradient(180deg, rgba(3,4,8,0.9) 0%, rgba(3,4,8,0) 100%); animation: fadeInDown 0.8s var(--spring-easing); }
@@ -118,13 +118,23 @@
         .btn-navigasi { display: flex; align-items: center; justify-content: center; gap: 6px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); color: white !important; padding: 10px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 13px; margin-top: 12px; transition: all 0.2s; }
         .btn-navigasi:active { background: rgba(255,255,255,0.2); transform: scale(0.97); }
 
-        /* === NOC LEGEND (SCROLLABLE) === */
-        .noc-legend { position: absolute; bottom: calc(95px + var(--safe-bottom)); left: 15px; z-index: 400; background: rgba(5, 6, 10, 0.8); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 18px; padding: 15px 18px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); font-size: 11px; font-weight: 600; letter-spacing: 0.5px; max-height: 250px; overflow-y: auto; }
-        .noc-legend::-webkit-scrollbar { width: 4px; }
-        .noc-legend::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
-        .legend-item { display: flex; align-items: center; margin-bottom: 10px; color: var(--text-secondary); }
+        /* === NOC LEGEND (DIPERKECIL, TRANSPARAN, KIRI ATAS) === */
+        .noc-legend { 
+            position: absolute; top: 15px; left: 15px; z-index: 400; 
+            background: rgba(10, 16, 32, 0.35); /* Lebih Transparan */
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); 
+            border: 1px solid rgba(255, 255, 255, 0.15); 
+            border-radius: 12px; padding: 10px 12px; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3); 
+            font-size: 10px; /* Diperkecil */
+            font-weight: 500; letter-spacing: 0.3px; 
+            max-height: 45vh; overflow-y: auto; 
+        }
+        .noc-legend::-webkit-scrollbar { width: 3px; }
+        .noc-legend::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+        .legend-item { display: flex; align-items: center; margin-bottom: 6px; color: rgba(255, 255, 255, 0.85); }
         .legend-item:last-child { margin-bottom: 0; }
-        .legend-color { width: 10px; height: 10px; border-radius: 50%; margin-right: 12px; box-shadow: 0 0 10px currentColor; flex-shrink: 0; }
+        .legend-color { width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; box-shadow: 0 0 6px currentColor; flex-shrink: 0; }
 
         /* === TITIK ODP SEDERHANA (DOT MARKER) SETTINGS === */
         .node-wrapper { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; cursor: pointer; }
@@ -212,7 +222,7 @@
         <!-- === RIGHT VIEW: LIVE MAPS NOC === -->
         <div class="view-map">
             
-            <!-- Legend Updated with Perum & Sukamelang Networks -->
+            <!-- Legend Updated: Smaller, Transparent, Top-Left -->
             <div class="noc-legend">
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-mahkota1); background: var(--c-mahkota1);"></div> Mahkota 1</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-mahkota2); background: var(--c-mahkota2);"></div> Mahkota 2</div>
@@ -272,7 +282,6 @@
             }
         }
 
-        // --- ORIGINAL APP LOGIC ---
         function updateJalur() {
             const serverSelect = document.getElementById("server").value;
             const jalurSelect = document.getElementById("jalur");
@@ -345,7 +354,7 @@
         }
 
         // --- MAP INITIALIZATION ---
-        var map = L.map('map', { zoomControl: false }).setView([-6.551947, 107.772040], 13); // Zoom-out slightly to accommodate Sukamelang & Perum areas
+        var map = L.map('map', { zoomControl: false }).setView([-6.551947, 107.772040], 13); 
         L.control.zoom({ position: 'topright' }).addTo(map); 
 
         var darkSatellite = L.tileLayer('http://{s}.google.com/vt?lyrs=s,h&x={x}&y={y}&z={z}', { maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'], className: 'map-dark-filter' });
@@ -378,7 +387,6 @@
         let networkPaths = {};
         groupMapping.forEach(grp => { networkPaths[grp.prefix] = { color: grp.color, nodes: [] }; });
 
-        // Loop untuk memetakan koordinat dan ODP
         for (const server in dataJaringan) {
             for (const jalur in dataJaringan[server]) {
                 for (const namaOdp in dataJaringan[server][jalur]) {
@@ -434,7 +442,6 @@
             const nodes = groupData.nodes;
             
             if (nodes.length > 1) {
-                // Diurutkan berdasarkan angka di belakang nama
                 nodes.sort((a, b) => a.name.localeCompare(b.name, undefined, {numeric: true}));
                 
                 const pathCoords = nodes.map(n => [n.lat, n.lng]);
