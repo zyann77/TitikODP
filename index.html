@@ -27,32 +27,33 @@
             --c-bgsr2:    #FF9F0A; 
             --c-cibarola: #64D2FF; 
 
-            /* Warna NOC untuk Perum & Puri */
+            /* Warna NOC untuk Perum */
             --c-perum1:   #00FF7F; 
             --c-perum2:   #FF00FF; 
             --c-perum3:   #FDF500; 
-            --c-puri1:    #FF1493; 
             
-            /* Warna NOC untuk Sukamelang */
+            /* Warna NOC untuk Sukamelang & Puri */
+            --c-puri1:    #FF1493; 
             --c-pasirceuri1: #FF2D55; 
             --c-pasirceuri2: #5E5CE6; 
             --c-pasirceuri3: #00F5FF; 
             --c-pasirceuri4: #FF9500; 
-            --c-palabuan1:   #FF007F; 
-            
+            --c-palabuan1:   #00FF00; 
             --c-rancakandong1: #00FFFF; 
             --c-rancakandong2: #BFFF00; 
             --c-rancakandong3: #FF00FF; 
             --c-rancakandong4: #9D00FF; 
             --c-rancakandong5: #00FF7F; 
-            
             --c-cisugih1: #FF4500; 
             --c-cisugih2: #8A2BE2; 
             --c-pramuka1: #00BFFF; 
             --c-sukamelang1: #ADFF2F; 
-            
-            /* Warna NOC Khusus Flumbon */
-            --c-flumbon1: #FF7F50; /* Neon Coral / Light Salmon */
+            --c-flumbon1: #FF7F50; 
+
+            /* Warna NOC untuk Panglejar Baru */
+            --c-panglejar1: #00E5FF; /* Cyan Terang */
+            --c-panglejar2: #B2FF59; /* Green Yellow */
+            --c-panglejar3: #FF69B4; /* Hot Pink */
             
             --text-primary: #FFFFFF;
             --text-secondary: rgba(255, 255, 255, 0.72);
@@ -219,7 +220,6 @@
                             <option value="Cibarola">Server Cibarola</option>
                             <option value="Panglejar">Server Panglejar</option>
                             <option value="Perum">Server Perum</option>
-                            <option value="Puri">Server Puri</option>
                             <option value="Sukamelang">Server Sukamelang</option>
                         </select>
                         <i data-lucide="chevron-down" class="input-arrow"></i>
@@ -264,6 +264,10 @@
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-bgsr2); background: var(--c-bgsr2);"></div> BGSR 2</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-cibarola); background: var(--c-cibarola);"></div> Cibarola 1</div>
                 
+                <div class="legend-item"><div class="legend-color" style="color: var(--c-panglejar1); background: var(--c-panglejar1);"></div> Panglejar 1</div>
+                <div class="legend-item"><div class="legend-color" style="color: var(--c-panglejar2); background: var(--c-panglejar2);"></div> Panglejar 2</div>
+                <div class="legend-item"><div class="legend-color" style="color: var(--c-panglejar3); background: var(--c-panglejar3);"></div> Panglejar 3</div>
+                
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-perum1); background: var(--c-perum1);"></div> Perum 1</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-perum2); background: var(--c-perum2);"></div> Perum 2</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-perum3); background: var(--c-perum3);"></div> Perum 3</div>
@@ -280,7 +284,6 @@
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-rancakandong3); background: var(--c-rancakandong3);"></div> Rancakandong 3</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-rancakandong4); background: var(--c-rancakandong4);"></div> Rancakandong 4</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-rancakandong5); background: var(--c-rancakandong5);"></div> Rancakandong 5</div>
-                
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-cisugih1); background: var(--c-cisugih1);"></div> Cisugih 1</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-cisugih2); background: var(--c-cisugih2);"></div> Cisugih 2</div>
                 <div class="legend-item"><div class="legend-color" style="color: var(--c-pramuka1); background: var(--c-pramuka1);"></div> Pramuka 1</div>
@@ -404,7 +407,7 @@
         }
 
         // --- MAP INITIALIZATION ---
-        var map = L.map('map', { zoomControl: false }).setView([-6.551947, 107.772040], 13); 
+        var map = L.map('map', { zoomControl: false }).setView([-6.564835, 107.763375], 13); // Centered to newly added Panglejar
         L.control.zoom({ position: 'topright' }).addTo(map); 
 
         var darkSatellite = L.tileLayer('http://{s}.google.com/vt?lyrs=s,h&x={x}&y={y}&z={z}', { maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'], className: 'map-dark-filter' });
@@ -428,6 +431,9 @@
             { prefix: "BGSR 1", color: "var(--c-bgsr1)" },
             { prefix: "BGSR 2", color: "var(--c-bgsr2)" },
             { prefix: "Cibarola 1", color: "var(--c-cibarola)" },
+            { prefix: "Panglejar 1", color: "var(--c-panglejar1)" },
+            { prefix: "Panglejar 2", color: "var(--c-panglejar2)" },
+            { prefix: "Panglejar 3", color: "var(--c-panglejar3)" },
             { prefix: "Perum 1", color: "var(--c-perum1)" },
             { prefix: "Perum 2", color: "var(--c-perum2)" },
             { prefix: "Perum 3", color: "var(--c-perum3)" },
