@@ -56,7 +56,7 @@
             --c-panglejar1: #00E5FF; 
             --c-panglejar2: #B2FF59; 
             --c-panglejar3: #FF69B4; 
-            --c-panglejar4: #FF8C00; /* Sunset Orange Neon */
+            --c-panglejar4: #FF8C00; 
             
             --text-primary: #FFFFFF;
             --text-secondary: rgba(255, 255, 255, 0.72);
@@ -136,7 +136,32 @@
         .btn-navigasi { display: flex; align-items: center; justify-content: center; gap: 6px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); color: white !important; padding: 10px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 13px; margin-top: 12px; transition: all 0.2s; }
         .btn-navigasi:active { background: rgba(255,255,255,0.2); transform: scale(0.97); }
 
-        /* === TOMBOL TOGGLE PENCARIAN/INFO JALUR === */
+        /* === TOMBOL HOME MENGAMBANG (KANAN ATAS) === */
+        .btn-home {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 1000;
+            background: rgba(10, 16, 32, 0.7);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            transition: all 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+        }
+        .btn-home:active { transform: scale(0.90); background: rgba(255,255,255,0.1); }
+        
+        /* Agar kontrol bawaan Leaflet (layer/zoom) tidak menutupi/tertutupi Tombol Home */
+        .leaflet-top { top: 65px !important; }
+
+        /* === TOMBOL TOGGLE INFO JALUR (KIRI ATAS) === */
         .btn-legend-toggle {
             position: absolute; top: 15px; left: 15px; z-index: 500;
             background: rgba(10, 16, 32, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -196,6 +221,11 @@
     <div class="ambient-bg">
         <div class="orb orb-1"></div><div class="orb orb-2"></div>
     </div>
+
+    <!-- Tombol Home yang selalu muncul di kedua layar -->
+    <a href="https://zyann77.github.io/Router/" class="btn-home" aria-label="Menu Utama">
+        <i data-lucide="home" style="width: 20px; height: 20px;"></i>
+    </a>
 
     <!-- Main Slider -->
     <div class="app-slider" id="appSlider">
